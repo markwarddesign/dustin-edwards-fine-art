@@ -1,6 +1,6 @@
 import { registerBlockType } from '@wordpress/blocks';
 import { useBlockProps, InspectorControls, MediaUpload, MediaUploadCheck } from '@wordpress/block-editor';
-import { PanelBody, Button, TextControl, Flex, FlexItem } from '@wordpress/components';
+import { PanelBody, Button, TextControl, Flex, FlexItem, BaseControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 
 registerBlockType('dedwards/adaptive-gallery', {
@@ -8,14 +8,14 @@ registerBlockType('dedwards/adaptive-gallery', {
         const { images } = attributes;
         const blockProps = useBlockProps();
 
-        const addImage = (media) => {
-            const newImages = [...images, {
-                id: media.id,
-                url: media.url,
-                alt: media.alt || '',
-                title: '',
-                caption: ''
-            }];
+        const onSelectImages = (media) => {
+            const newImages = media.map(item => ({
+                id: item.id,
+                url: item.url,
+                alt: item.alt || '',
+                title: item.title || '',
+                caption: item.caption || ''
+            }));
             setAttributes({ images: newImages });
         };
 
@@ -36,16 +36,39 @@ registerBlockType('dedwards/adaptive-gallery', {
                     <PanelBody title={__('Gallery Settings', 'dedwards')}>
                         <MediaUploadCheck>
                             <MediaUpload
-                                onSelect={addImage}
+                                onSelect={onSelectImages}
                                 allowedTypes={['image']}
-                                multiple={false}
+                                multiple={true}
+                                gallery={true}
+                                value={images.map(img => img.id)}
                                 render={({ open }) => (
-                                    <Button onClick={open} className="button button-large">
-                                        {__('Add Image', 'dedwards')}
-                                    </Button>
+                                    <BaseControl>
+                                        <Button onClick={open} variant="secondary" size="default">
+                                            {images.length > 0 
+                                                ? __('Edit Gallery', 'dedwards') 
+                                                : __('Create Gallery', 'dedwards')
+                                            }
+                                        </Button>
+                                        {images.length > 0 && (
+                                            <Button 
+                                                onClick={() => setAttributes({ images: [] })}
+                                                variant="tertiary"
+                                                isDestructive
+                                                style={{ marginLeft: '8px' }}
+                                            >
+                                                {__('Clear Gallery', 'dedwards')}
+                                            </Button>
+                                        )}
+                                    </BaseControl>
                                 )}
                             />
                         </MediaUploadCheck>
+                        
+                        {images.length > 0 && (
+                            <div style={{ marginTop: '16px' }}>
+                                <strong>{images.length} {images.length === 1 ? 'image' : 'images'} selected</strong>
+                            </div>
+                        )}
                         
                         {images.map((image, index) => (
                             <PanelBody key={image.id} title={`Image ${index + 1}`} initialOpen={false}>
