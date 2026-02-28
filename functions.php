@@ -29,24 +29,6 @@ function dedwards_enqueue_styles() {
         filemtime( get_template_directory() . '/assets/js/navigation.js' ),
         true
     );
-    
-    // Enqueue Masonry for gallery blocks
-    wp_enqueue_script(
-        'masonry-js',
-        'https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js',
-        array(),
-        '4.2.2',
-        true
-    );
-    
-    // Enqueue custom masonry initialization
-    wp_enqueue_script(
-        'dedwards-masonry-init',
-        get_template_directory_uri() . '/assets/js/masonry-init.js',
-        array('masonry-js'),
-        filemtime( get_template_directory() . '/assets/js/masonry-init.js' ),
-        true
-    );
 }
 add_action( 'wp_enqueue_scripts', 'dedwards_enqueue_styles', 1 );
 
@@ -1933,16 +1915,12 @@ function dedwards_render_adaptive_gallery( $attributes ) {
                 <p class="text-stone-500">Add images to create your adaptive gallery</p>
             </div>
         <?php else : ?>
-            <div class="masonry-gallery">
-                <!-- Masonry sizer elements -->
-                <div class="masonry-sizer"></div>
-                <div class="masonry-gutter"></div>
-                
+            <div class="max-w-6xl mx-auto columns-1 md:columns-2 lg:columns-3 xl:columns-4 gap-6">
                 <?php foreach ( $images as $index => $image ) : 
                     $delay = 0.1 * ($index + 1);
                     ?>
-                    <div class="masonry-item reveal" style="animation-delay: <?php echo esc_attr( $delay ); ?>s;">
-                        <div class="img-wrapper overflow-hidden bg-stone-100 shadow-sm">
+                    <div class="break-inside-avoid mb-6 reveal" style="animation-delay: <?php echo esc_attr( $delay ); ?>s;">
+                        <div class="img-wrapper overflow-hidden bg-stone-100 shadow-sm rounded-sm">
                             <img 
                                 src="<?php echo esc_url( $image['url'] ); ?>" 
                                 alt="<?php echo esc_attr( $image['alt'] ?? '' ); ?>"
@@ -1950,14 +1928,14 @@ function dedwards_render_adaptive_gallery( $attributes ) {
                             />
                         </div>
                         <?php if ( ! empty( $image['title'] ) || ! empty( $image['caption'] ) ) : ?>
-                            <div class="mt-4 px-2">
+                            <div class="p-4">
                                 <?php if ( ! empty( $image['title'] ) ) : ?>
-                                    <h3 class="font-serif text-lg md:text-xl font-light italic text-stone-900">
+                                    <h3 class="font-serif text-lg md:text-xl font-light italic text-stone-900 mb-1">
                                         <?php echo esc_html( $image['title'] ); ?>
                                     </h3>
                                 <?php endif; ?>
                                 <?php if ( ! empty( $image['caption'] ) ) : ?>
-                                    <p class="text-[9px] uppercase tracking-[0.3em] text-stone-500 mt-1">
+                                    <p class="text-[9px] uppercase tracking-[0.3em] text-stone-500">
                                         <?php echo esc_html( $image['caption'] ); ?>
                                     </p>
                                 <?php endif; ?>
@@ -1966,36 +1944,6 @@ function dedwards_render_adaptive_gallery( $attributes ) {
                     </div>
                 <?php endforeach; ?>
             </div>
-            
-            <style>
-            .masonry-gallery {
-                max-width: 1200px;
-                margin: 0 auto !important;
-                position: relative;
-            }
-            .masonry-gallery .masonry-sizer {
-                width: 33.333% !important;
-            }
-            .masonry-gallery .masonry-gutter {
-                width: 2% !important;
-            }
-            .masonry-gallery .masonry-item {
-                width: 32% !important;
-                margin-bottom: 2% !important;
-                float: left;
-            }
-            @media (max-width: 768px) {
-                .masonry-gallery .masonry-sizer {
-                    width: 48% !important;
-                }
-                .masonry-gallery .masonry-item {
-                    width: 48% !important;
-                }
-                .masonry-gallery .masonry-gutter {
-                    width: 4% !important;
-                }
-            }
-            </style>
         <?php endif; ?>
     </main>
     
