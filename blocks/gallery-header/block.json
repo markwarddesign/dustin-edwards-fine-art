@@ -22,6 +22,5 @@
             "type": "string",
             "default": "A selection of environmental studies exploring scale, light, and placement."
         }
-    },
-    "editorScript": "file:./index.js"
+    }
 }
