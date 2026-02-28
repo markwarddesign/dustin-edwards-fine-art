@@ -127,6 +127,8 @@ function dedwards_allowed_block_types( $allowed_blocks, $editor_context ) {
         'dedwards/artist-timeline',
         'dedwards/philosophy-section',
         'dedwards/inquire-section',
+        'dedwards/gallery-header',
+        'dedwards/adaptive-gallery',
         
         // Basic text blocks
         'core/paragraph',
@@ -1087,6 +1089,31 @@ function dedwards_register_blocks() {
         'render_callback' => 'dedwards_render_mosaic_gallery',
         'editor_script' => 'dedwards-mosaic-gallery-editor',
     ) );
+    
+    // Register Gallery Header and Adaptive Gallery blocks
+    wp_register_script(
+        'dedwards-gallery-header-editor',
+        get_template_directory_uri() . '/build/gallery-header/index.js',
+        array( 'wp-blocks', 'wp-element', 'wp-editor', 'wp-components', 'wp-i18n', 'wp-block-editor' ),
+        filemtime( get_template_directory() . '/build/gallery-header/index.js' )
+    );
+    
+    register_block_type( get_template_directory() . '/blocks/gallery-header', array(
+        'render_callback' => 'dedwards_render_gallery_header',
+        'editor_script' => 'dedwards-gallery-header-editor',
+    ) );
+    
+    wp_register_script(
+        'dedwards-adaptive-gallery-editor',
+        get_template_directory_uri() . '/build/adaptive-gallery/index.js',
+        array( 'wp-blocks', 'wp-element', 'wp-editor', 'wp-components', 'wp-i18n', 'wp-block-editor' ),
+        filemtime( get_template_directory() . '/build/adaptive-gallery/index.js' )
+    );
+    
+    register_block_type( get_template_directory() . '/blocks/adaptive-gallery', array(
+        'render_callback' => 'dedwards_render_adaptive_gallery',
+        'editor_script' => 'dedwards-adaptive-gallery-editor',
+    ) );
 }
 add_action( 'init', 'dedwards_register_blocks' );
 
@@ -1847,3 +1874,138 @@ function dedwards_add_tailwind_to_nav_overlay( $block_content, $block ) {
     return $block_content;
 }
 add_filter( 'render_block', 'dedwards_add_tailwind_to_nav_overlay', 10, 2 );
+
+/**
+ * Render callback for Gallery Header block
+ */
+function dedwards_render_gallery_header( $attributes ) {
+    $title = $attributes['title'] ?? 'Gallery';
+    $subtitle = $attributes['subtitle'] ?? 'Visualizing Western form and Wildlife within architectural landscapes.';
+    $description = $attributes['description'] ?? 'A selection of environmental studies exploring scale, light, and placement.';
+    
+    ob_start();
+    ?>
+    <header class="max-w-4xl mx-auto pt-32 pb-32 px-8 text-center reveal">
+        <h1 class="font-serif italic text-6xl md:text-8xl font-light mb-10 text-stone-900">
+            <?php echo esc_html( $title ); ?>
+        </h1>
+        <div class="w-16 h-[1px] bg-stone-700 mx-auto mb-12"></div>
+        <p class="text-stone-600 font-light leading-relaxed text-xl md:text-2xl font-serif italic max-w-2xl mx-auto">
+            <?php echo wp_kses_post( $subtitle ); ?>
+        </p>
+        <p class="mt-8 text-[11px] uppercase tracking-[0.4em] text-stone-500 max-w-sm mx-auto leading-loose">
+            <?php echo wp_kses_post( $description ); ?>
+        </p>
+    </header>
+    <?php
+    return ob_get_clean();
+}
+
+/**
+ * Render callback for Adaptive Gallery block
+ */
+function dedwards_render_adaptive_gallery( $attributes ) {
+    $images = $attributes['images'] ?? array();
+    
+    ob_start();
+    ?>
+    <main class="max-w-[1600px] mx-auto px-8 md:px-12 pb-40">
+        <?php if ( empty( $images ) ) : ?>
+            <div class="text-center py-20 border-2 border-dashed border-stone-300">
+                <p class="text-stone-500">Add images to create your adaptive gallery</p>
+            </div>
+        <?php else : ?>
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-y-32 md:gap-x-20 items-end">
+                <?php foreach ( $images as $index => $image ) : 
+                    // Dynamic layout patterns
+                    $col_span = 'md:col-span-6';
+                    $aspect_class = 'aspect-[4/5]';
+                    $text_align = 'text-left';
+                    $col_start = '';
+                    
+                    switch ( $index % 5 ) {
+                        case 0:
+                            $col_span = 'md:col-span-8';
+                            $aspect_class = 'aspect-[16/9]';
+                            break;
+                        case 1:
+                            $col_span = 'md:col-span-4';
+                            $aspect_class = 'aspect-[3/4]';
+                            $text_align = 'md:text-left text-right';
+                            break;
+                        case 2:
+                            $col_span = 'md:col-span-5';
+                            $aspect_class = 'aspect-[4/5]';
+                            break;
+                        case 3:
+                            $col_span = 'md:col-span-7';
+                            $aspect_class = 'aspect-square';
+                            break;
+                        case 4:
+                            $col_start = 'md:col-start-3';
+                            $col_span = 'md:col-span-8';
+                            $aspect_class = 'aspect-[16/7]';
+                            $text_align = 'text-center';
+                            break;
+                    }
+                    
+                    $delay = 0.1 * ($index + 1);
+                    ?>
+                    <div class="<?php echo esc_attr( $col_start . ' ' . $col_span ); ?> reveal" style="animation-delay: <?php echo esc_attr( $delay ); ?>s;">
+                        <div class="img-wrapper <?php echo esc_attr( $aspect_class ); ?> overflow-hidden bg-stone-100 shadow-lg">
+                            <img 
+                                src="<?php echo esc_url( $image['url'] ); ?>" 
+                                alt="<?php echo esc_attr( $image['alt'] ?? '' ); ?>"
+                                class="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
+                            />
+                        </div>
+                        <?php if ( ! empty( $image['title'] ) || ! empty( $image['caption'] ) ) : ?>
+                            <div class="mt-8 <?php echo esc_attr( $text_align ); ?>">
+                                <?php if ( ! empty( $image['title'] ) ) : ?>
+                                    <h3 class="font-serif text-3xl font-light italic text-stone-900">
+                                        <?php echo esc_html( $image['title'] ); ?>
+                                    </h3>
+                                <?php endif; ?>
+                                <?php if ( ! empty( $image['caption'] ) ) : ?>
+                                    <p class="text-[10px] uppercase tracking-[0.3em] text-stone-500 mt-2">
+                                        <?php echo esc_html( $image['caption'] ); ?>
+                                    </p>
+                                <?php endif; ?>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+    </main>
+    
+    <!-- Add reveal animation CSS -->
+    <style>
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            animation: revealUp 0.8s ease-out forwards;
+        }
+        
+        @keyframes revealUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .img-wrapper {
+            overflow: hidden;
+        }
+        
+        .img-wrapper img {
+            transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .img-wrapper:hover img {
+            transform: scale(1.05);
+        }
+    </style>
+    <?php
+    return ob_get_clean();
+}

@@ -1,0 +1,19 @@
+{
+    "apiVersion": 2,
+    "name": "dedwards/adaptive-gallery",
+    "title": "Adaptive Gallery",
+    "description": "Dynamic gallery layout with adaptive image positioning",
+    "icon": "format-gallery",
+    "category": "dedwards-blocks",
+    "supports": {
+        "html": false,
+        "align": ["full"]
+    },
+    "attributes": {
+        "images": {
+            "type": "array",
+            "default": []
+        }
+    },
+    "editorScript": "file:./index.js"
+}

@@ -1,0 +1,27 @@
+{
+    "apiVersion": 2,
+    "name": "dedwards/gallery-header",
+    "title": "Gallery Header",
+    "description": "Header section for gallery pages",
+    "icon": "heading",
+    "category": "dedwards-blocks",
+    "supports": {
+        "html": false,
+        "align": ["full"]
+    },
+    "attributes": {
+        "title": {
+            "type": "string",
+            "default": "Gallery"
+        },
+        "subtitle": {
+            "type": "string", 
+            "default": "Visualizing Western form and Wildlife within architectural landscapes."
+        },
+        "description": {
+            "type": "string",
+            "default": "A selection of environmental studies exploring scale, light, and placement."
+        }
+    },
+    "editorScript": "file:./index.js"
+}
