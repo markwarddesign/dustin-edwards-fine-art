@@ -1915,49 +1915,58 @@ function dedwards_render_adaptive_gallery( $attributes ) {
                 <p class="text-stone-500">Add images to create your adaptive gallery</p>
             </div>
         <?php else : ?>
-            <div class="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 auto-rows-min">
+            <div class="max-w-7xl mx-auto space-y-24 md:space-y-32 lg:space-y-40">
                 <?php foreach ( $images as $index => $image ) : 
-                    // Create varied grid sizes for mosaic effect
-                    $grid_class = 'col-span-1'; // Default single width
+                    // Create alternating layout patterns
+                    $is_left = $index % 2 === 0;
+                    $size_pattern = $index % 4;
                     
-                    // Make some images span multiple columns for variety
-                    switch ($index % 12) {
-                        case 0:
-                            $grid_class = 'col-span-2 md:col-span-2'; // Wide
+                    // Vary the sizes and alignment
+                    switch ($size_pattern) {
+                        case 0: // Large, left aligned
+                            $container_class = 'md:flex md:items-center';
+                            $image_class = 'md:w-2/3 lg:w-3/5';
+                            $text_class = 'md:w-1/3 lg:w-2/5 md:pl-12 lg:pl-16 mt-8 md:mt-0';
                             break;
-                        case 3:
-                            $grid_class = 'col-span-1'; // Normal
+                        case 1: // Medium, right aligned
+                            $container_class = 'md:flex md:items-center md:flex-row-reverse';
+                            $image_class = 'md:w-1/2 lg:w-2/5';
+                            $text_class = 'md:w-1/2 lg:w-3/5 md:pr-12 lg:pr-16 mt-8 md:mt-0';
                             break;
-                        case 6:
-                            $grid_class = 'col-span-2'; // Wide
+                        case 2: // Large, centered
+                            $container_class = 'text-center';
+                            $image_class = 'w-full md:w-4/5 lg:w-3/4 mx-auto';
+                            $text_class = 'mt-8 max-w-lg mx-auto';
                             break;
-                        case 9:
-                            $grid_class = 'col-span-1'; // Normal
-                            break;
-                        default:
-                            $grid_class = 'col-span-1'; // Normal
+                        case 3: // Small, offset right
+                            $container_class = 'md:flex md:items-start md:flex-row-reverse';
+                            $image_class = 'md:w-1/3 lg:w-2/5';
+                            $text_class = 'md:w-2/3 lg:w-3/5 md:pr-12 lg:pr-20 mt-8 md:mt-12';
                             break;
                     }
                     
                     $delay = 0.1 * ($index + 1);
                     ?>
-                    <div class="<?php echo esc_attr($grid_class); ?> reveal" style="animation-delay: <?php echo esc_attr( $delay ); ?>s;">
-                        <div class="img-wrapper overflow-hidden bg-stone-100 shadow-sm rounded-sm">
-                            <img 
-                                src="<?php echo esc_url( $image['url'] ); ?>" 
-                                alt="<?php echo esc_attr( $image['alt'] ?? '' ); ?>"
-                                class="w-full h-auto transition-transform duration-700 hover:scale-105"
-                            />
+                    <div class="<?php echo esc_attr($container_class); ?> reveal" style="animation-delay: <?php echo esc_attr( $delay ); ?>s;">
+                        <div class="<?php echo esc_attr($image_class); ?>">
+                            <div class="img-wrapper overflow-hidden bg-stone-100 shadow-lg">
+                                <img 
+                                    src="<?php echo esc_url( $image['url'] ); ?>" 
+                                    alt="<?php echo esc_attr( $image['alt'] ?? '' ); ?>"
+                                    class="w-full h-auto transition-transform duration-700 hover:scale-105"
+                                />
+                            </div>
                         </div>
+                        
                         <?php if ( ! empty( $image['title'] ) || ! empty( $image['caption'] ) ) : ?>
-                            <div class="p-4">
+                            <div class="<?php echo esc_attr($text_class); ?>">
                                 <?php if ( ! empty( $image['title'] ) ) : ?>
-                                    <h3 class="font-serif text-lg md:text-xl font-light italic text-stone-900 mb-1">
+                                    <h3 class="font-serif text-2xl md:text-3xl lg:text-4xl font-light italic text-stone-900 mb-4">
                                         <?php echo esc_html( $image['title'] ); ?>
                                     </h3>
                                 <?php endif; ?>
                                 <?php if ( ! empty( $image['caption'] ) ) : ?>
-                                    <p class="text-[9px] uppercase tracking-[0.3em] text-stone-500">
+                                    <p class="text-xs uppercase tracking-[0.4em] text-stone-500 leading-relaxed">
                                         <?php echo esc_html( $image['caption'] ); ?>
                                     </p>
                                 <?php endif; ?>
