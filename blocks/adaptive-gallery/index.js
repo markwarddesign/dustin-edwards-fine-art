@@ -101,56 +101,57 @@ registerBlockType('dedwards/adaptive-gallery', {
                                 <p className="text-stone-500">Add images to create your adaptive gallery</p>
                             </div>
                         ) : (
-                            <div className="grid grid-cols-1 md:grid-cols-12 gap-y-32 md:gap-x-20 items-end">
+                            <div className="columns-1 md:columns-2 lg:columns-3 xl:columns-4 gap-8 space-y-8">
                                 {images.map((image, index) => {
-                                    // Dynamic layout patterns
-                                    let colSpan = 'md:col-span-6';
-                                    let aspectClass = 'aspect-[4/5]';
-                                    let textAlign = 'text-left';
+                                    // Vary the sizes for visual interest
+                                    let sizeClass = 'w-full';
+                                    let marginClass = 'mb-8';
                                     
-                                    switch (index % 5) {
+                                    switch (index % 6) {
                                         case 0:
-                                            colSpan = 'md:col-span-8';
-                                            aspectClass = 'aspect-[16/9]';
+                                            sizeClass = 'w-full'; // Full width
+                                            marginClass = 'mb-12';
                                             break;
                                         case 1:
-                                            colSpan = 'md:col-span-4';
-                                            aspectClass = 'aspect-[3/4]';
-                                            textAlign = 'md:text-left text-right';
+                                            sizeClass = 'w-full'; // Full width
+                                            marginClass = 'mb-6';
                                             break;
                                         case 2:
-                                            colSpan = 'md:col-span-5';
-                                            aspectClass = 'aspect-[4/5]';
+                                            sizeClass = 'w-full'; // Full width
+                                            marginClass = 'mb-10';
                                             break;
                                         case 3:
-                                            colSpan = 'md:col-span-7';
-                                            aspectClass = 'aspect-square';
+                                            sizeClass = 'w-full'; // Full width
+                                            marginClass = 'mb-8';
                                             break;
                                         case 4:
-                                            colSpan = 'md:col-start-3 md:col-span-8';
-                                            aspectClass = 'aspect-[16/7]';
-                                            textAlign = 'text-center';
+                                            sizeClass = 'w-full'; // Full width
+                                            marginClass = 'mb-14';
+                                            break;
+                                        case 5:
+                                            sizeClass = 'w-full'; // Full width
+                                            marginClass = 'mb-6';
                                             break;
                                     }
 
                                     return (
-                                        <div key={image.id} className={`${colSpan} reveal`}>
-                                            <div className={`img-wrapper ${aspectClass} overflow-hidden bg-stone-100`}>
+                                        <div key={image.id} className={`${sizeClass} ${marginClass} break-inside-avoid reveal`}>
+                                            <div className="img-wrapper overflow-hidden bg-stone-100">
                                                 <img 
                                                     src={image.url} 
                                                     alt={image.alt} 
-                                                    className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
+                                                    className="w-full h-auto transition-transform duration-700 hover:scale-105"
                                                 />
                                             </div>
                                             {(image.title || image.caption) && (
-                                                <div className={`mt-8 ${textAlign}`}>
+                                                <div className="mt-6 text-left">
                                                     {image.title && (
-                                                        <h3 className="font-serif text-3xl font-light italic text-stone-900">
+                                                        <h3 className="font-serif text-xl md:text-2xl font-light italic text-stone-900">
                                                             {image.title}
                                                         </h3>
                                                     )}
                                                     {image.caption && (
-                                                        <p className="text-[10px] uppercase tracking-[0.3em] text-stone-500 mt-2">
+                                                        <p className="text-[9px] uppercase tracking-[0.3em] text-stone-500 mt-1">
                                                             {image.caption}
                                                         </p>
                                                     )}
