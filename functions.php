@@ -1915,11 +1915,33 @@ function dedwards_render_adaptive_gallery( $attributes ) {
                 <p class="text-stone-500">Add images to create your adaptive gallery</p>
             </div>
         <?php else : ?>
-            <div class="max-w-6xl mx-auto columns-1 md:columns-2 lg:columns-3 xl:columns-4 gap-6">
+            <div class="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 auto-rows-min">
                 <?php foreach ( $images as $index => $image ) : 
+                    // Create varied grid sizes for mosaic effect
+                    $grid_class = 'col-span-1'; // Default single width
+                    
+                    // Make some images span multiple columns for variety
+                    switch ($index % 12) {
+                        case 0:
+                            $grid_class = 'col-span-2 md:col-span-2'; // Wide
+                            break;
+                        case 3:
+                            $grid_class = 'col-span-1'; // Normal
+                            break;
+                        case 6:
+                            $grid_class = 'col-span-2'; // Wide
+                            break;
+                        case 9:
+                            $grid_class = 'col-span-1'; // Normal
+                            break;
+                        default:
+                            $grid_class = 'col-span-1'; // Normal
+                            break;
+                    }
+                    
                     $delay = 0.1 * ($index + 1);
                     ?>
-                    <div class="break-inside-avoid mb-6 reveal" style="animation-delay: <?php echo esc_attr( $delay ); ?>s;">
+                    <div class="<?php echo esc_attr($grid_class); ?> reveal" style="animation-delay: <?php echo esc_attr( $delay ); ?>s;">
                         <div class="img-wrapper overflow-hidden bg-stone-100 shadow-sm rounded-sm">
                             <img 
                                 src="<?php echo esc_url( $image['url'] ); ?>" 
