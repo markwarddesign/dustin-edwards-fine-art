@@ -29,6 +29,24 @@ function dedwards_enqueue_styles() {
         filemtime( get_template_directory() . '/assets/js/navigation.js' ),
         true
     );
+    
+    // Enqueue Masonry for gallery blocks
+    wp_enqueue_script(
+        'masonry-js',
+        'https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js',
+        array(),
+        '4.2.2',
+        true
+    );
+    
+    // Enqueue custom masonry initialization
+    wp_enqueue_script(
+        'dedwards-masonry-init',
+        get_template_directory_uri() . '/assets/js/masonry-init.js',
+        array('masonry-js'),
+        filemtime( get_template_directory() . '/assets/js/masonry-init.js' ),
+        true
+    );
 }
 add_action( 'wp_enqueue_scripts', 'dedwards_enqueue_styles', 1 );
 
@@ -1960,27 +1978,6 @@ function dedwards_render_adaptive_gallery( $attributes ) {
             </div>
         <?php endif; ?>
     </main>
-    
-    <!-- Load Masonry -->
-    <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var elem = document.querySelector('.masonry-gallery');
-            if (elem) {
-                var msnry = new Masonry(elem, {
-                    itemSelector: '.masonry-item',
-                    columnWidth: '.masonry-sizer',
-                    gutter: '.masonry-gutter',
-                    percentPosition: true
-                });
-                
-                // Re-layout when images load
-                elem.addEventListener('load', function() {
-                    msnry.layout();
-                }, true);
-            }
-        });
-    </script>
     
     <!-- Add reveal animation CSS -->
     <style>
