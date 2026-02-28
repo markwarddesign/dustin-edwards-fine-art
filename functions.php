@@ -1969,7 +1969,9 @@ function dedwards_render_adaptive_gallery( $attributes ) {
             
             <style>
             .masonry-gallery {
-                /* Masonry container */
+                max-width: 1200px;
+                margin: 0 auto;
+                position: relative;
             }
             .masonry-sizer {
                 width: 33.333%;
