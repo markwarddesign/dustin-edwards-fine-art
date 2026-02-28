@@ -4,7 +4,7 @@
     "title": "Gallery Header",
     "description": "Header section for gallery pages",
     "icon": "heading",
-    "category": "dedwards-blocks",
+    "category": "custom",
     "supports": {
         "html": false,
         "align": ["full"]

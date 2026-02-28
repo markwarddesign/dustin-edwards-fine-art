@@ -4,7 +4,7 @@
     "title": "Adaptive Gallery",
     "description": "Dynamic gallery layout with adaptive image positioning",
     "icon": "format-gallery",
-    "category": "dedwards-blocks",
+    "category": "custom",
     "supports": {
         "html": false,
         "align": ["full"]
