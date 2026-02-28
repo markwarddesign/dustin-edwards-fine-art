@@ -1915,59 +1915,51 @@ function dedwards_render_adaptive_gallery( $attributes ) {
                 <p class="text-stone-500">Add images to create your adaptive gallery</p>
             </div>
         <?php else : ?>
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-y-32 md:gap-x-20 items-end">
+            <div class="columns-1 md:columns-2 lg:columns-3 xl:columns-4 gap-8 space-y-8">
                 <?php foreach ( $images as $index => $image ) : 
-                    // Dynamic layout patterns
-                    $col_span = 'md:col-span-6';
-                    $aspect_class = 'aspect-[4/5]';
-                    $text_align = 'text-left';
-                    $col_start = '';
+                    // Vary the margin for visual interest
+                    $margin_class = 'mb-8';
                     
-                    switch ( $index % 5 ) {
+                    switch ( $index % 6 ) {
                         case 0:
-                            $col_span = 'md:col-span-8';
-                            $aspect_class = 'aspect-[16/9]';
+                            $margin_class = 'mb-12';
                             break;
                         case 1:
-                            $col_span = 'md:col-span-4';
-                            $aspect_class = 'aspect-[3/4]';
-                            $text_align = 'md:text-left text-right';
+                            $margin_class = 'mb-6';
                             break;
                         case 2:
-                            $col_span = 'md:col-span-5';
-                            $aspect_class = 'aspect-[4/5]';
+                            $margin_class = 'mb-10';
                             break;
                         case 3:
-                            $col_span = 'md:col-span-7';
-                            $aspect_class = 'aspect-square';
+                            $margin_class = 'mb-8';
                             break;
                         case 4:
-                            $col_start = 'md:col-start-3';
-                            $col_span = 'md:col-span-8';
-                            $aspect_class = 'aspect-[16/7]';
-                            $text_align = 'text-center';
+                            $margin_class = 'mb-14';
+                            break;
+                        case 5:
+                            $margin_class = 'mb-6';
                             break;
                     }
                     
                     $delay = 0.1 * ($index + 1);
                     ?>
-                    <div class="<?php echo esc_attr( $col_start . ' ' . $col_span ); ?> reveal" style="animation-delay: <?php echo esc_attr( $delay ); ?>s;">
-                        <div class="img-wrapper <?php echo esc_attr( $aspect_class ); ?> overflow-hidden bg-stone-100 shadow-lg">
+                    <div class="w-full <?php echo esc_attr( $margin_class ); ?> break-inside-avoid reveal" style="animation-delay: <?php echo esc_attr( $delay ); ?>s;">
+                        <div class="img-wrapper overflow-hidden bg-stone-100">
                             <img 
                                 src="<?php echo esc_url( $image['url'] ); ?>" 
                                 alt="<?php echo esc_attr( $image['alt'] ?? '' ); ?>"
-                                class="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
+                                class="w-full h-auto transition-transform duration-700 hover:scale-105"
                             />
                         </div>
                         <?php if ( ! empty( $image['title'] ) || ! empty( $image['caption'] ) ) : ?>
-                            <div class="mt-8 <?php echo esc_attr( $text_align ); ?>">
+                            <div class="mt-6 text-left">
                                 <?php if ( ! empty( $image['title'] ) ) : ?>
-                                    <h3 class="font-serif text-3xl font-light italic text-stone-900">
+                                    <h3 class="font-serif text-xl md:text-2xl font-light italic text-stone-900">
                                         <?php echo esc_html( $image['title'] ); ?>
                                     </h3>
                                 <?php endif; ?>
                                 <?php if ( ! empty( $image['caption'] ) ) : ?>
-                                    <p class="text-[10px] uppercase tracking-[0.3em] text-stone-500 mt-2">
+                                    <p class="text-[9px] uppercase tracking-[0.3em] text-stone-500 mt-1">
                                         <?php echo esc_html( $image['caption'] ); ?>
                                     </p>
                                 <?php endif; ?>
