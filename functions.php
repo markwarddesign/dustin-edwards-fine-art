@@ -1915,36 +1915,26 @@ function dedwards_render_adaptive_gallery( $attributes ) {
                 <p class="text-stone-500">Add images to create your adaptive gallery</p>
             </div>
         <?php else : ?>
-            <div class="columns-1 md:columns-2 lg:columns-3 xl:columns-4 gap-8 space-y-8">
+            <div class="masonry-gallery" data-masonry='{"itemSelector": ".masonry-item", "columnWidth": ".masonry-sizer", "gutter": ".masonry-gutter", "percentPosition": true}'>
+                <!-- Masonry sizing elements -->
+                <div class="masonry-sizer w-1/2 md:w-1/3 lg:w-1/4"></div>
+                <div class="masonry-gutter w-4 md:w-6 lg:w-8"></div>
+                
                 <?php foreach ( $images as $index => $image ) : 
-                    // Vary the margin for visual interest
-                    $margin_class = 'mb-8';
+                    // Vary the widths for interesting layout
+                    $width_class = 'w-1/2 md:w-1/3 lg:w-1/4'; // Default
                     
-                    switch ( $index % 6 ) {
-                        case 0:
-                            $margin_class = 'mb-12';
-                            break;
-                        case 1:
-                            $margin_class = 'mb-6';
-                            break;
-                        case 2:
-                            $margin_class = 'mb-10';
-                            break;
-                        case 3:
-                            $margin_class = 'mb-8';
-                            break;
-                        case 4:
-                            $margin_class = 'mb-14';
-                            break;
-                        case 5:
-                            $margin_class = 'mb-6';
-                            break;
+                    // Make some images wider occasionally
+                    if ( $index % 7 === 0 ) {
+                        $width_class = 'w-full md:w-2/3 lg:w-1/2'; // Large
+                    } elseif ( $index % 5 === 0 ) {
+                        $width_class = 'w-full md:w-1/2 lg:w-1/3'; // Medium
                     }
                     
                     $delay = 0.1 * ($index + 1);
                     ?>
-                    <div class="w-full <?php echo esc_attr( $margin_class ); ?> break-inside-avoid reveal" style="animation-delay: <?php echo esc_attr( $delay ); ?>s;">
-                        <div class="img-wrapper overflow-hidden bg-stone-100">
+                    <div class="masonry-item <?php echo esc_attr( $width_class ); ?> mb-4 md:mb-6 lg:mb-8 reveal" style="animation-delay: <?php echo esc_attr( $delay ); ?>s;">
+                        <div class="img-wrapper overflow-hidden bg-stone-100 shadow-sm">
                             <img 
                                 src="<?php echo esc_url( $image['url'] ); ?>" 
                                 alt="<?php echo esc_attr( $image['alt'] ?? '' ); ?>"
@@ -1952,9 +1942,9 @@ function dedwards_render_adaptive_gallery( $attributes ) {
                             />
                         </div>
                         <?php if ( ! empty( $image['title'] ) || ! empty( $image['caption'] ) ) : ?>
-                            <div class="mt-6 text-left">
+                            <div class="mt-4 px-2">
                                 <?php if ( ! empty( $image['title'] ) ) : ?>
-                                    <h3 class="font-serif text-xl md:text-2xl font-light italic text-stone-900">
+                                    <h3 class="font-serif text-lg md:text-xl font-light italic text-stone-900">
                                         <?php echo esc_html( $image['title'] ); ?>
                                     </h3>
                                 <?php endif; ?>
@@ -1970,6 +1960,27 @@ function dedwards_render_adaptive_gallery( $attributes ) {
             </div>
         <?php endif; ?>
     </main>
+    
+    <!-- Load Masonry -->
+    <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var elem = document.querySelector('.masonry-gallery');
+            if (elem) {
+                var msnry = new Masonry(elem, {
+                    itemSelector: '.masonry-item',
+                    columnWidth: '.masonry-sizer',
+                    gutter: '.masonry-gutter',
+                    percentPosition: true
+                });
+                
+                // Re-layout when images load
+                elem.addEventListener('load', function() {
+                    msnry.layout();
+                }, true);
+            }
+        });
+    </script>
     
     <!-- Add reveal animation CSS -->
     <style>

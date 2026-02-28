@@ -101,42 +101,21 @@ registerBlockType('dedwards/adaptive-gallery', {
                                 <p className="text-stone-500">Add images to create your adaptive gallery</p>
                             </div>
                         ) : (
-                            <div className="columns-1 md:columns-2 lg:columns-3 xl:columns-4 gap-8 space-y-8">
+                            <div className="masonry-gallery">
                                 {images.map((image, index) => {
-                                    // Vary the sizes for visual interest
-                                    let sizeClass = 'w-full';
-                                    let marginClass = 'mb-8';
+                                    // Vary the widths for interesting layout
+                                    let widthClass = 'w-1/2 md:w-1/3 lg:w-1/4'; // Default
                                     
-                                    switch (index % 6) {
-                                        case 0:
-                                            sizeClass = 'w-full'; // Full width
-                                            marginClass = 'mb-12';
-                                            break;
-                                        case 1:
-                                            sizeClass = 'w-full'; // Full width
-                                            marginClass = 'mb-6';
-                                            break;
-                                        case 2:
-                                            sizeClass = 'w-full'; // Full width
-                                            marginClass = 'mb-10';
-                                            break;
-                                        case 3:
-                                            sizeClass = 'w-full'; // Full width
-                                            marginClass = 'mb-8';
-                                            break;
-                                        case 4:
-                                            sizeClass = 'w-full'; // Full width
-                                            marginClass = 'mb-14';
-                                            break;
-                                        case 5:
-                                            sizeClass = 'w-full'; // Full width
-                                            marginClass = 'mb-6';
-                                            break;
+                                    // Make some images wider occasionally
+                                    if (index % 7 === 0) {
+                                        widthClass = 'w-full md:w-2/3 lg:w-1/2'; // Large
+                                    } else if (index % 5 === 0) {
+                                        widthClass = 'w-full md:w-1/2 lg:w-1/3'; // Medium
                                     }
 
                                     return (
-                                        <div key={image.id} className={`${sizeClass} ${marginClass} break-inside-avoid reveal`}>
-                                            <div className="img-wrapper overflow-hidden bg-stone-100">
+                                        <div key={image.id} className={`masonry-item ${widthClass} mb-4 md:mb-6 lg:mb-8 reveal`} style={{display: 'inline-block', verticalAlign: 'top', marginRight: '1rem', marginBottom: '1rem'}}>
+                                            <div className="img-wrapper overflow-hidden bg-stone-100 shadow-sm">
                                                 <img 
                                                     src={image.url} 
                                                     alt={image.alt} 
@@ -144,9 +123,9 @@ registerBlockType('dedwards/adaptive-gallery', {
                                                 />
                                             </div>
                                             {(image.title || image.caption) && (
-                                                <div className="mt-6 text-left">
+                                                <div className="mt-4 px-2">
                                                     {image.title && (
-                                                        <h3 className="font-serif text-xl md:text-2xl font-light italic text-stone-900">
+                                                        <h3 className="font-serif text-lg md:text-xl font-light italic text-stone-900">
                                                             {image.title}
                                                         </h3>
                                                     )}
