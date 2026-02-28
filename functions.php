@@ -1933,25 +1933,15 @@ function dedwards_render_adaptive_gallery( $attributes ) {
                 <p class="text-stone-500">Add images to create your adaptive gallery</p>
             </div>
         <?php else : ?>
-            <div class="masonry-gallery" data-masonry='{"itemSelector": ".masonry-item", "columnWidth": ".masonry-sizer", "gutter": ".masonry-gutter", "percentPosition": true}'>
-                <!-- Masonry sizing elements -->
-                <div class="masonry-sizer w-1/2 md:w-1/3 lg:w-1/4"></div>
-                <div class="masonry-gutter w-4 md:w-6 lg:w-8"></div>
+            <div class="masonry-gallery">
+                <!-- Masonry sizer elements -->
+                <div class="masonry-sizer"></div>
+                <div class="masonry-gutter"></div>
                 
                 <?php foreach ( $images as $index => $image ) : 
-                    // Vary the widths for interesting layout
-                    $width_class = 'w-1/2 md:w-1/3 lg:w-1/4'; // Default
-                    
-                    // Make some images wider occasionally
-                    if ( $index % 7 === 0 ) {
-                        $width_class = 'w-full md:w-2/3 lg:w-1/2'; // Large
-                    } elseif ( $index % 5 === 0 ) {
-                        $width_class = 'w-full md:w-1/2 lg:w-1/3'; // Medium
-                    }
-                    
                     $delay = 0.1 * ($index + 1);
                     ?>
-                    <div class="masonry-item <?php echo esc_attr( $width_class ); ?> mb-4 md:mb-6 lg:mb-8 reveal" style="animation-delay: <?php echo esc_attr( $delay ); ?>s;">
+                    <div class="masonry-item reveal" style="animation-delay: <?php echo esc_attr( $delay ); ?>s;">
                         <div class="img-wrapper overflow-hidden bg-stone-100 shadow-sm">
                             <img 
                                 src="<?php echo esc_url( $image['url'] ); ?>" 
@@ -1976,6 +1966,33 @@ function dedwards_render_adaptive_gallery( $attributes ) {
                     </div>
                 <?php endforeach; ?>
             </div>
+            
+            <style>
+            .masonry-gallery {
+                /* Masonry container */
+            }
+            .masonry-sizer {
+                width: 33.333%;
+            }
+            .masonry-gutter {
+                width: 2%;
+            }
+            .masonry-item {
+                width: 32%;
+                margin-bottom: 2%;
+            }
+            @media (max-width: 768px) {
+                .masonry-sizer {
+                    width: 48%;
+                }
+                .masonry-item {
+                    width: 48%;
+                }
+                .masonry-gutter {
+                    width: 4%;
+                }
+            }
+            </style>
         <?php endif; ?>
     </main>
     
