@@ -1,0 +1,28 @@
+{
+  "apiVersion": 2,
+  "name": "dedwards/philosophy-section",
+  "title": "Philosophy Section",
+  "category": "text",
+  "icon": "format-quote",
+  "description": "Artist philosophy statement with quote and signature",
+  "supports": {
+    "align": false
+  },
+  "attributes": {
+    "heading": {
+      "type": "string",
+      "default": "My work is rooted in a desire to honor the spirit, beauty, and movement found in God's creation."
+    },
+    "paragraphs": {
+      "type": "array",
+      "default": [
+        "Each sculpture begins with a search for truth—truth in gesture, personality, and emotion. I strive to create bronze pieces that not only represent a subject, but embody its essence. When a viewer feels a spark of connection—a sense of presence, motion, or emotion—I consider the work successful.",
+        "Growing up in a sculptor's studio and immersed in the landscapes of Idaho, I learned to see the world with curiosity and reverence. My goal is to create art that inspires reflection, evokes feeling, and brings life to stillness. Ultimately, I hope my work speaks differently to each person, while inviting everyone to feel something real."
+      ]
+    },
+    "signatureUrl": {
+      "type": "string",
+      "default": ""
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "dedwards/quote-section",
+  "version": "1.0.0",
+  "title": "Quote Section",
+  "category": "custom",
+  "icon": "format-quote",
+  "description": "Display a centered quote with custom styling",
+  "supports": {
+    "html": false,
+    "align": ["full"]
+  },
+  "attributes": {
+    "quote": {
+      "type": "string",
+      "default": "Art becomes powerful when it breathes, moves, and speaks to the heart."
+    }
+  },
+  "textdomain": "dedwards",
+  "editorScript": "file:../../build/quote-section/index.js"
+}

@@ -1,0 +1,45 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "dedwards/mosaic-gallery",
+  "version": "1.0.0",
+  "title": "Mosaic Gallery",
+  "category": "custom",
+  "icon": "images-alt2",
+  "description": "Display artworks in an asymmetrical mosaic grid layout",
+  "supports": {
+    "html": false,
+    "align": ["wide", "full"]
+  },
+  "attributes": {
+    "heading": {
+      "type": "string",
+      "default": "Gallery"
+    },
+    "subheading": {
+      "type": "string",
+      "default": "Selected Works"
+    },
+    "postsPerPage": {
+      "type": "number",
+      "default": 8
+    },
+    "category": {
+      "type": "string",
+      "default": ""
+    },
+    "showTitles": {
+      "type": "boolean",
+      "default": true
+    },
+    "showMetadata": {
+      "type": "boolean",
+      "default": false
+    },
+    "mosaicPattern": {
+      "type": "string",
+      "default": "dynamic"
+    }
+  },
+  "textdomain": "dedwards"
+}

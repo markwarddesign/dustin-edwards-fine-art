@@ -1,0 +1,37 @@
+{
+  "apiVersion": 2,
+  "name": "dedwards/inquire-section",
+  "title": "Inquire Section",
+  "category": "text",
+  "icon": "email",
+  "description": "Contact/inquiry section with info and Contact Form 7",
+  "supports": {
+    "align": false
+  },
+  "attributes": {
+    "heading": {
+      "type": "string",
+      "default": "Inquire"
+    },
+    "description": {
+      "type": "string",
+      "default": "Available for commissions, gallery exhibitions, and private collection acquisitions."
+    },
+    "studioLocation": {
+      "type": "string",
+      "default": "Twin Falls, Idaho, USA"
+    },
+    "representation": {
+      "type": "string",
+      "default": "Available for Gallery Representation"
+    },
+    "email": {
+      "type": "string",
+      "default": "info@dustinedwards.com"
+    },
+    "formShortcode": {
+      "type": "string",
+      "default": ""
+    }
+  }
+}

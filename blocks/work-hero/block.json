@@ -1,0 +1,25 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "dedwards/work-hero",
+  "version": "1.0.0",
+  "title": "Work Details",
+  "category": "custom",
+  "icon": "format-image",
+  "description": "Display complete work detail page",
+  "supports": {
+    "html": false
+  },
+  "attributes": {
+    "detailImage1": {
+      "type": "object",
+      "default": null
+    },
+    "detailImage2": {
+      "type": "object",
+      "default": null
+    }
+  },
+  "usesContext": ["postId", "postType"],
+  "textdomain": "dedwards"
+}

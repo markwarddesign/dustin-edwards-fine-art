@@ -1,0 +1,33 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "dedwards/collection-section",
+  "version": "1.0.0",
+  "title": "Collection Grid",
+  "category": "custom",
+  "icon": "grid-view",
+  "description": "Display portfolio works in a grid layout",
+  "supports": {
+    "html": false,
+    "align": ["wide", "full"]
+  },
+  "attributes": {
+    "heading": {
+      "type": "string",
+      "default": "Collection"
+    },
+    "subheading": {
+      "type": "string",
+      "default": "Realism • Motion • Spirit"
+    },
+    "postsPerPage": {
+      "type": "number",
+      "default": 6
+    },
+    "category": {
+      "type": "string",
+      "default": ""
+    }
+  },
+  "textdomain": "dedwards"
+}

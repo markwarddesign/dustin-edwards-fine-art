@@ -1,0 +1,40 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "dedwards/artist-timeline",
+  "version": "1.0.0",
+  "title": "Artist Timeline",
+  "category": "custom",
+  "icon": "list-view",
+  "description": "Timeline of events with years and descriptions",
+  "supports": {
+    "html": false
+  },
+  "attributes": {
+    "heading": {
+      "type": "string",
+      "default": "Timeline"
+    },
+    "events": {
+      "type": "array",
+      "default": [
+        {
+          "year": "1999",
+          "title": "Artistic Foundation",
+          "description": "Graduated with degrees in Business & Art. First sculpture acquired by alma mater."
+        },
+        {
+          "year": "2003",
+          "title": "Doctoral Studies",
+          "description": "Completed Doctorate in Pharmacy & Allied Health in Omaha, NE."
+        },
+        {
+          "year": "2018",
+          "title": "Return to the Studio",
+          "description": "Transitioned fully from medicine to fine art bronze sculpture."
+        }
+      ]
+    }
+  },
+  "textdomain": "dedwards"
+}

@@ -1,0 +1,32 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "dedwards/work-cta",
+  "version": "1.0.0",
+  "title": "Work CTA",
+  "category": "custom",
+  "icon": "email",
+  "description": "Call-to-action for work inquiries",
+  "supports": {
+    "html": false
+  },
+  "attributes": {
+    "heading": {
+      "type": "string",
+      "default": "Interested in This Piece?"
+    },
+    "description": {
+      "type": "string",
+      "default": "Contact me to discuss acquisition, commissioning a similar work, or to arrange a studio visit."
+    },
+    "buttonText": {
+      "type": "string",
+      "default": "Get In Touch"
+    },
+    "buttonLink": {
+      "type": "string",
+      "default": "/contact"
+    }
+  },
+  "textdomain": "dedwards"
+}

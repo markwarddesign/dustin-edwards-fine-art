@@ -1,0 +1,85 @@
+/**
+ * Block Editor Styles
+ * 
+ * Makes the editor canvas match the frontend exactly
+ */
+
+/* Remove ALL Gutenberg default editor constraints */
+.editor-styles-wrapper {
+  max-width: none !important;
+  padding: 0 !important;
+}
+
+.editor-styles-wrapper .block-editor-block-list__layout {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* Remove default block margins in editor */
+.editor-styles-wrapper .wp-block {
+  max-width: none !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* Ensure hero block is full-width in editor */
+.editor-styles-wrapper .wp-block-dedwards-hero-section {
+  margin: 0 !important;
+  padding: 0 !important;
+  max-width: none !important;
+  width: 100% !important;
+}
+
+/* Remove block appender spacing */
+.editor-styles-wrapper .block-list-appender {
+  margin: 0 !important;
+}
+
+/* Make RichText fields behave properly */
+.editor-styles-wrapper .wp-block-dedwards-hero-section [contenteditable] {
+  outline: 2px solid transparent !important;
+  outline-offset: 2px !important;
+}
+
+.editor-styles-wrapper .wp-block-dedwards-hero-section [contenteditable]:focus {
+  outline: 2px solid #007cba !important;
+  outline-offset: 2px !important;
+}
+
+/* Ensure empty RichText fields are editable */
+.editor-styles-wrapper .wp-block-dedwards-hero-section [data-rich-text-placeholder] {
+  min-height: 1em;
+  position: relative;
+}
+
+/* Force correct font rendering in editor */
+.editor-styles-wrapper .font-serif,
+.editor-styles-wrapper .font-serif * {
+  font-family: 'Playfair Display', serif !important;
+}
+
+.editor-styles-wrapper .font-display,
+.editor-styles-wrapper .font-display * {
+  font-family: 'Cinzel', serif !important;
+}
+
+.editor-styles-wrapper .font-sans,
+.editor-styles-wrapper .font-sans * {
+  font-family: 'Inter', sans-serif !important;
+}
+
+/* Make sure background colors work in editor */
+.editor-styles-wrapper .bg-stone-850 {
+  background-color: #1f1c1a !important;
+}
+
+/* Full viewport height in editor */
+.editor-styles-wrapper .h-screen {
+  height: 100vh !important;
+  min-height: 600px !important;
+}
+
+/* Fix button positioning in editor */
+.editor-styles-wrapper .wp-block-dedwards-hero-section .components-button {
+  z-index: 30 !important;
+}

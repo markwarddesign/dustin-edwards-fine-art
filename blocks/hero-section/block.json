@@ -1,0 +1,68 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "dedwards/hero-section",
+  "version": "1.0.0",
+  "title": "Hero Section",
+  "category": "custom",
+  "icon": "cover-image",
+  "description": "A customizable hero section with image background, heading, and call-to-action.",
+  "supports": {
+    "align": ["full"],
+    "html": false,
+    "spacing": {
+      "margin": false,
+      "padding": false
+    },
+    "color": {
+      "background": false,
+      "text": false
+    },
+    "typography": {
+      "fontSize": false,
+      "lineHeight": false
+    },
+    "defaultStylePicker": false
+  },
+  "attributes": {
+    "align": {
+      "type": "string",
+      "default": "full"
+    },
+    "topLine": {
+      "type": "string",
+      "default": "Idaho &bull; Bronze &bull; Fine Art"
+    },
+    "heading": {
+      "type": "string",
+      "default": "To Reveal"
+    },
+    "headingAccent": {
+      "type": "string",
+      "default": "The Soul"
+    },
+    "quote": {
+      "type": "string",
+      "default": "\"I sculpt to reveal the soul, the motion, and the God-given spirit that lives within every subject.\""
+    },
+    "backgroundImage": {
+      "type": "string",
+      "default": ""
+    },
+    "overlayOpacity": {
+      "type": "number",
+      "default": 60
+    },
+    "showDivider": {
+      "type": "boolean",
+      "default": true
+    },
+    "showScrollIndicator": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "editorScript": "file:../../build/hero-section/index.js",
+  "script": "file:../../build/hero-section/index.js"
+}
+

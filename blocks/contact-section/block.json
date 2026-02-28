@@ -1,0 +1,30 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "dedwards/contact-section",
+  "version": "1.0.0",
+  "title": "Contact Section",
+  "category": "custom",
+  "icon": "email",
+  "description": "Display contact form with Contact Form 7 integration",
+  "supports": {
+    "html": false,
+    "align": ["full"]
+  },
+  "attributes": {
+    "heading": {
+      "type": "string",
+      "default": "Acquire & Inquire"
+    },
+    "subheading": {
+      "type": "string",
+      "default": "My hope is that each sculpture stirs something unique within you."
+    },
+    "formShortcode": {
+      "type": "string",
+      "default": ""
+    }
+  },
+  "textdomain": "dedwards",
+  "editorScript": "file:../../build/contact-section/index.js"
+}

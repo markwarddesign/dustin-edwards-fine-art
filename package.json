@@ -1,0 +1,27 @@
+{
+  "name": "dedwards",
+  "version": "1.0.0",
+  "description": "A custom Gutenberg theme with TailwindCSS",
+  "scripts": {
+    "dev": "npm run watch",
+    "watch": "concurrently \"npx tailwindcss -i ./assets/css/src/style.css -o ./assets/css/style.css --watch\" \"wp-scripts start\"",
+    "build": "npm run build:css && npm run build:blocks",
+    "build:css": "npx tailwindcss -i ./assets/css/src/style.css -o ./assets/css/style.css --minify",
+    "build:blocks": "wp-scripts build"
+  },
+  "keywords": [
+    "wordpress",
+    "gutenberg",
+    "tailwindcss"
+  ],
+  "author": "",
+  "license": "GPL-2.0-or-later",
+  "devDependencies": {
+    "@tailwindcss/typography": "^0.5.10",
+    "@wordpress/scripts": "^27.0.0",
+    "autoprefixer": "^10.4.16",
+    "concurrently": "^8.2.2",
+    "postcss": "^8.4.32",
+    "tailwindcss": "^3.4.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "dedwards/work-details",
+  "version": "1.0.0",
+  "title": "Work Details",
+  "category": "custom",
+  "icon": "list-view",
+  "description": "Display work specifications (material, dimensions, edition)",
+  "supports": {
+    "html": false
+  },
+  "attributes": {},
+  "usesContext": ["postId", "postType"],
+  "textdomain": "dedwards"
+}

@@ -1,0 +1,70 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "dedwards/artist-section",
+  "version": "1.0.0",
+  "title": "Artist Section",
+  "category": "custom",
+  "icon": "admin-users",
+  "description": "Display artist biography with image and details",
+  "supports": {
+    "html": false,
+    "align": ["full"]
+  },
+  "attributes": {
+    "imageUrl": {
+      "type": "string",
+      "default": ""
+    },
+    "imageAlt": {
+      "type": "string",
+      "default": "Dustin Edwards in Studio"
+    },
+    "yearWatermark": {
+      "type": "string",
+      "default": "1999"
+    },
+    "sectionLabel": {
+      "type": "string",
+      "default": "About the Artist"
+    },
+    "headingLine1": {
+      "type": "string",
+      "default": "From Medicine"
+    },
+    "headingLine2": {
+      "type": "string",
+      "default": "to Masterpiece"
+    },
+    "paragraph1": {
+      "type": "string",
+      "default": "<strong class=\"text-bronze-50 font-medium\">Dustin Edwards</strong> is a fine art bronze sculptor whose work is celebrated for its lifelike detail and emotional impact. Born and raised in Idaho, Dustin grew up watching his father create bronze sculptures, giving him an early foundation in craft and design."
+    },
+    "paragraph2": {
+      "type": "string",
+      "default": "After studying Business and Art and later earning a doctorate, he spent nearly two decades in the medical field before fully committing to his artistic career in 2018."
+    },
+    "paragraph3": {
+      "type": "string",
+      "default": "Drawing inspiration from nature and his deep spiritual connection to the world around him, Dustin creates sculptures that honor the personality, spirit, and story of each subject. His work is recognized for its dynamic sense of motion and powerful realism."
+    },
+    "stat1Label": {
+      "type": "string",
+      "default": "Heritage"
+    },
+    "stat1Value": {
+      "type": "string",
+      "default": "Idaho Native"
+    },
+    "stat2Label": {
+      "type": "string",
+      "default": "Experience"
+    },
+    "stat2Value": {
+      "type": "string",
+      "default": "2nd Gen Sculptor"
+    }
+  },
+  "textdomain": "dedwards",
+  "editorScript": "file:../../build/artist-section/index.js"
+}

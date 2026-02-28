@@ -1,0 +1,88 @@
+<!-- wp:html -->
+<nav id="navbar" class="fixed w-full z-50 mix-blend-difference text-white px-6 md:px-12 py-8 bg-transparent transition-all duration-300">
+    <div class="flex justify-between items-center">
+        <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="text-xl md:text-2xl font-display font-semibold tracking-widest hover:opacity-70 transition-opacity">
+            <?php bloginfo( 'name' ); ?>
+        </a>
+        
+        <!-- Desktop Menu -->
+        <div class="hidden lg:flex gap-12 text-xs uppercase tracking-widest font-semibold">
+            <a href="/" class="hover:text-bronze-300 transition-colors">Home</a>
+            <a href="/collection" class="hover:text-bronze-300 transition-colors">Collection</a>
+            <a href="/the-artist" class="hover:text-bronze-300 transition-colors">The Artist</a>
+            <a href="/philosophy" class="hover:text-bronze-300 transition-colors">Philosophy</a>
+            <a href="/inquire" class="hover:text-bronze-300 transition-colors">Inquire</a>
+        </div>
+        
+        <!-- Mobile Menu Button -->
+        <button id="mobile-menu-toggle" class="lg:hidden text-white" aria-label="Toggle menu">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+        </button>
+    </div>
+</nav>
+
+<!-- Mobile Menu Overlay -->
+<div id="mobile-menu" class="fixed inset-0 w-screen h-screen bg-stone-900 z-[999999] hidden">
+    <button id="mobile-menu-close" class="fixed top-10 right-10 text-bronze-300 z-[9999999]" aria-label="Close menu">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+    </button>
+    <div class="flex flex-col items-center justify-center h-full gap-8 text-center">
+        <a href="/" class="text-bronze-300 hover:text-white text-5xl font-display font-semibold uppercase tracking-[0.2em] transition-colors">Home</a>
+        <a href="/collection" class="text-bronze-300 hover:text-white text-5xl font-display font-semibold uppercase tracking-[0.2em] transition-colors">Collection</a>
+        <a href="/the-artist" class="text-bronze-300 hover:text-white text-5xl font-display font-semibold uppercase tracking-[0.2em] transition-colors">The Artist</a>
+        <a href="/philosophy" class="text-bronze-300 hover:text-white text-5xl font-display font-semibold uppercase tracking-[0.2em] transition-colors">Philosophy</a>
+        <a href="/inquire" class="text-bronze-300 hover:text-white text-5xl font-display font-semibold uppercase tracking-[0.2em] transition-colors">Inquire</a>
+    </div>
+</div>
+
+<script>
+(function() {
+    const navbar = document.getElementById('navbar');
+    const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const mobileMenuClose = document.getElementById('mobile-menu-close');
+    
+    if (!navbar) return;
+    
+    // Scroll effect
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            navbar.classList.remove('bg-transparent', 'py-8', 'mix-blend-difference');
+            navbar.classList.add('bg-stone-900/90', 'backdrop-blur-sm', 'py-4', 'shadow-lg');
+        } else {
+            navbar.classList.add('bg-transparent', 'py-8', 'mix-blend-difference');
+            navbar.classList.remove('bg-stone-900/90', 'backdrop-blur-sm', 'py-4', 'shadow-lg');
+        }
+    });
+    
+    // Mobile menu toggle
+    if (mobileMenuToggle && mobileMenu && mobileMenuClose) {
+        mobileMenuToggle.addEventListener('click', () => {
+            mobileMenu.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        });
+        
+        mobileMenuClose.addEventListener('click', () => {
+            mobileMenu.classList.add('hidden');
+            document.body.style.overflow = '';
+        });
+        
+        // Close on link click
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+                document.body.style.overflow = '';
+            });
+        });
+    }
+})();
+</script>
+<!-- /wp:html -->
+
+
+
+

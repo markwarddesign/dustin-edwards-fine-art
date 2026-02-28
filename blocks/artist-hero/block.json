@@ -1,0 +1,24 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "dedwards/artist-hero",
+  "version": "1.0.0",
+  "title": "Artist Hero",
+  "category": "custom",
+  "icon": "format-image",
+  "description": "Hero section with background image and title overlay",
+  "supports": {
+    "html": false
+  },
+  "attributes": {
+    "backgroundImage": {
+      "type": "object",
+      "default": null
+    },
+    "title": {
+      "type": "string",
+      "default": "The Artist"
+    }
+  },
+  "textdomain": "dedwards"
+}

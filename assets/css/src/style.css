@@ -1,0 +1,457 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Body background */
+body {
+  background-color: #ffffff;
+}
+
+/* Main content padding to account for fixed nav */
+main {
+  padding-top: 88px;
+}
+
+/* Contact Form 7 Styling */
+.dedwards-contact-form .wpcf7-form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem; /* space-y-8 */
+}
+
+.dedwards-contact-form .wpcf7-form p {
+  margin: 0 !important;
+}
+
+.dedwards-contact-form .wpcf7-form-control-wrap {
+  display: block;
+  width: 100%;
+}
+
+.dedwards-contact-form label {
+  display: block !important;
+  font-size: 10px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.1em !important;
+  color: #a8a29e !important; /* stone-400 */
+  margin-bottom: 0.5rem !important;
+  transition: color 0.3s ease !important;
+  font-weight: normal !important;
+}
+
+.dedwards-contact-form input[type="text"],
+.dedwards-contact-form input[type="email"],
+.dedwards-contact-form input[type="tel"],
+.dedwards-contact-form input[type="url"],
+.dedwards-contact-form textarea,
+.dedwards-contact-form .wpcf7-form-control {
+  width: 100% !important;
+  background-color: transparent !important;
+  border: none !important;
+  border-bottom: 1px solid #e7e5e4 !important; /* stone-200 */
+  padding-top: 0.75rem !important;
+  padding-bottom: 0.75rem !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  color: #292524 !important; /* stone-800 */
+  border-radius: 0 !important;
+  font-family: 'Playfair Display', serif !important;
+  font-size: 1.125rem !important;
+  transition: border-color 0.3s ease !important;
+  box-shadow: none !important;
+}
+
+.dedwards-contact-form input[type="text"]:focus,
+.dedwards-contact-form input[type="email"]:focus,
+.dedwards-contact-form input[type="tel"]:focus,
+.dedwards-contact-form input[type="url"]:focus,
+.dedwards-contact-form textarea:focus,
+.dedwards-contact-form .wpcf7-form-control:focus {
+  outline: none !important;
+  border-bottom-color: #ca8a04 !important; /* bronze-600 */
+  box-shadow: none !important;
+}
+
+.dedwards-contact-form textarea,
+.dedwards-contact-form textarea.wpcf7-form-control {
+  resize: none !important;
+  min-height: 120px !important;
+}
+
+.dedwards-contact-form input[type="submit"],
+.dedwards-contact-form .wpcf7-submit {
+  background-color: #1c1917 !important; /* stone-850 */
+  color: #ffffff !important;
+  padding: 1.25rem 3rem !important;
+  font-size: 10px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.25em !important;
+  border: 0 !important;
+  cursor: pointer !important;
+  transition: background-color 0.5s ease !important;
+  display: block !important;
+  width: auto !important;
+  margin: 2rem auto 0 !important;
+}
+
+.dedwards-contact-form input[type="submit"]:hover,
+.dedwards-contact-form .wpcf7-submit:hover {
+  background-color: #ca8a04 !important; /* bronze-600 */
+}
+
+.dedwards-contact-form .wpcf7-not-valid-tip {
+  font-size: 0.75rem !important;
+  color: #dc2626 !important; /* red-600 */
+  margin-top: 0.25rem !important;
+}
+
+.dedwards-contact-form .wpcf7-response-output {
+  margin-top: 1.5rem !important;
+  padding: 1rem !important;
+  border: 1px solid !important;
+  border-radius: 0.25rem !important;
+  font-size: 0.875rem !important;
+}
+
+.dedwards-contact-form .wpcf7-mail-sent-ok {
+  background-color: #f0fdf4 !important; /* green-50 */
+  border-color: #bbf7d0 !important; /* green-200 */
+  color: #166534 !important; /* green-800 */
+}
+
+.dedwards-contact-form .wpcf7-validation-errors {
+  background-color: #fef2f2 !important; /* red-50 */
+  border-color: #fecaca !important; /* red-200 */
+  color: #991b1b !important; /* red-800 */
+}
+
+.dedwards-contact-form .wpcf7-spam-blocked {
+  background-color: #fefce8 !important; /* yellow-50 */
+  border-color: #fef08a !important; /* yellow-200 */
+  color: #854d0e !important; /* yellow-800 */
+}
+
+/* Group focus-within for label color change */
+.dedwards-contact-form p:focus-within label {
+  color: #c2965b !important; /* bronze-600 */
+}
+
+/* Artist bio first letter styling */
+.artist-bio p:first-of-type::first-letter {
+  font-size: 3rem;
+  font-family: 'Cinzel', serif;
+  float: left;
+  margin-right: 0.75rem;
+  margin-top: -0.625rem;
+  color: #1c1917; /* stone-900 */
+  line-height: 1;
+}
+
+/* Artist bio paragraph spacing */
+.artist-bio p {
+  margin-bottom: 2rem;
+}
+
+.artist-bio p:last-child {
+  margin-bottom: 0;
+}
+
+/* Hide page title - direct rule for immediate effect */
+.hide-title .wp-block-post-title,
+.page-template-page-no-title .wp-block-post-title {
+  display: none !important;
+}
+
+@layer base {
+  body {
+    color: #ffffff;
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  /* Account for fixed navigation */
+  main {
+    padding-top: 120px;
+  }
+  
+  /* No top padding on homepage since hero is full height */
+  .home main,
+  .page-template-front-page main {
+    padding-top: 0;
+  }
+  
+  /* Force correct font families everywhere */
+  .font-serif,
+  .font-serif * {
+    font-family: 'Playfair Display', serif !important;
+  }
+  
+  .font-display,
+  .font-display * {
+    font-family: 'Cinzel', serif !important;
+  }
+  
+  .font-sans,
+  .font-sans * {
+    font-family: 'Inter', sans-serif !important;
+  }
+  
+  /* Remove only specific Gutenberg constraints, not all styles */
+  .wp-site-blocks {
+    max-width: none !important;
+  }
+  
+  .editor-styles-wrapper .block-editor-block-list__layout {
+    padding: 0 !important;
+  }
+  
+  /* Remove first child margin */
+  .wp-site-blocks > *:first-child {
+    margin-block-start: 0 !important;
+    margin-top: 0 !important;
+  }
+}
+
+/* Custom navigation with mix-blend-difference */
+@layer components {
+  .nav-blend-difference {
+    mix-blend-mode: difference;
+  }
+  
+  .mix-blend-difference {
+    mix-blend-mode: difference;
+  }
+  
+  .pointer-events-none {
+    pointer-events: none;
+  }
+  
+  .pointer-events-auto {
+    pointer-events: auto;
+  }
+  
+  /* Navigation hover effects */
+  nav a {
+    text-decoration: none;
+  }
+  
+  /* Ensure navigation items stay vertically centered */
+  .wp-block-group.fixed .wp-block-navigation {
+    display: flex;
+    align-items: center;
+    width: auto !important;
+    flex-shrink: 0;
+  }
+  
+  .wp-block-group.fixed {
+    align-items: center !important;
+  }
+  
+  .wp-block-navigation__container {
+    width: auto !important;
+  }
+  
+  /* WordPress Navigation Block Styling */
+  .wp-block-navigation a {
+    text-decoration: none;
+    color: white;
+    transition: color 0.15s ease-in-out;
+  }
+  
+  .wp-block-navigation a:hover {
+    color: #e5d4b8; /* bronze-300 */
+  }
+  
+  /* WordPress Navigation Block Styling */
+  .wp-block-navigation a {
+    text-decoration: none;
+    color: white;
+    transition: color 0.15s ease-in-out;
+  }
+  
+  .wp-block-navigation a:hover {
+    color: #e5d4b8; /* bronze-300 */
+  }
+  
+  /* Mobile menu - horizontally centered */
+  .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__responsive-container-content {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+  }
+  
+  .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__container {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+  }
+  
+  .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation-item {
+    text-align: center !important;
+  }
+  
+  /* Backdrop blur utility */
+  .backdrop-blur-sm {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  
+  /* Hide page title utility */
+  .hide-title .wp-block-post-title {
+    display: none !important;
+  }
+}
+
+/* Smooth scrolling */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Custom animations */
+@layer utilities {
+  .animate-fade-in {
+    animation: fadeIn 1s ease-out;
+  }
+  
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+/* Selection styling */
+@layer base {
+  ::selection {
+    background-color: #efe5d2;
+    color: #59402f;
+  }
+  
+  /* Reset Gutenberg defaults for all custom blocks */
+  .wp-block[class*="wp-block-dedwards"] {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  
+  /* Full-width alignment for hero */
+  .wp-block-dedwards-hero-section.alignfull {
+    margin-left: calc(50% - 50vw) !important;
+    margin-right: calc(50% - 50vw) !important;
+    max-width: 100vw !important;
+    width: 100vw !important;
+  }
+  
+  /* Footer social link hover effects */
+  footer .wp-block-social-links a:hover {
+    color: #c2965b !important;
+    opacity: 1;
+  }
+  
+  /* Smooth scroll behavior */
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Work grid enhancements */
+@layer components {
+  .work-item {
+    cursor: pointer;
+  }
+  
+  .work-item figure {
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  }
+  
+  .work-item figure::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-color: rgba(28, 25, 23, 0.1);
+    transition: background-color 0.3s;
+    z-index: 10;
+  }
+  
+  .work-item:hover figure::before {
+    background-color: transparent;
+  }
+  
+  .work-item img {
+    transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .work-item:hover img {
+    transform: scale(1.05);
+  }
+}
+
+/* Custom styles can be added here */
+
+/* Mosaic Gallery Styles */
+.mosaic-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 200px;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .mosaic-gallery-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .mosaic-gallery-grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+/* Ensure proper aspect ratios for mosaic items */
+.mosaic-gallery-grid .mosaic-item {
+  position: relative;
+  overflow: hidden;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.3s ease;
+}
+
+.mosaic-gallery-grid .mosaic-item:hover {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.mosaic-gallery-grid .mosaic-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mosaic-gallery-grid .mosaic-item:hover img {
+  transform: scale(1.05);
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 767px) {
+  .mosaic-gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  /* Simplify grid on mobile - make all items uniform */
+  .mosaic-gallery-grid .mosaic-item {
+    grid-column: span 1 !important;
+    grid-row: span 1 !important;
+  }
+}

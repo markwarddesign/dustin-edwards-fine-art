@@ -1,0 +1,38 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "dedwards/statement-section",
+  "version": "1.0.0",
+  "title": "Statement Section",
+  "category": "custom",
+  "icon": "format-quote",
+  "description": "Display artist statement with decorative background and signature",
+  "supports": {
+    "html": false,
+    "align": ["full"]
+  },
+  "attributes": {
+    "decorativeChar": {
+      "type": "string",
+      "default": "&"
+    },
+    "heading": {
+      "type": "string",
+      "default": "Artist Statement"
+    },
+    "paragraph1": {
+      "type": "string",
+      "default": "My work is rooted in a desire to honor the spirit, beauty, and movement found in God's creation. Each sculpture begins with a search for truth—truth in gesture, personality, and emotion."
+    },
+    "paragraph2": {
+      "type": "string",
+      "default": "I strive to create bronze pieces that not only represent a subject, but embody its essence. When a viewer feels a spark of connection—a sense of presence, motion, or emotion—I consider the work successful."
+    },
+    "author": {
+      "type": "string",
+      "default": "Dustin Edwards"
+    }
+  },
+  "textdomain": "dedwards",
+  "editorScript": "file:../../build/statement-section/index.js"
+}

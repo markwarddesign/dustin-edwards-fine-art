@@ -1,0 +1,28 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "dedwards/artist-bio",
+  "version": "1.0.0",
+  "title": "Artist Bio",
+  "category": "custom",
+  "icon": "admin-users",
+  "description": "Artist biography section with heading and content",
+  "supports": {
+    "html": false
+  },
+  "attributes": {
+    "heading": {
+      "type": "string",
+      "default": "Dustin Edwards"
+    },
+    "content": {
+      "type": "string",
+      "default": ""
+    },
+    "imageUrl": {
+      "type": "string",
+      "default": ""
+    }
+  },
+  "textdomain": "dedwards"
+}

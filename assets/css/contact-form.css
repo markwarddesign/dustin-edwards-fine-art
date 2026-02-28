@@ -1,0 +1,121 @@
+/* Contact Form 7 Styling */
+.dedwards-contact-form .wpcf7-form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem; /* space-y-8 */
+}
+
+.dedwards-contact-form .wpcf7-form p {
+  margin: 0 !important;
+}
+
+.dedwards-contact-form .wpcf7-form-control-wrap {
+  display: block;
+  width: 100%;
+}
+
+.dedwards-contact-form label {
+  display: block !important;
+  font-size: 10px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.1em !important;
+  color: #a8a29e !important; /* stone-400 */
+  margin-bottom: 0.5rem !important;
+  transition: color 0.3s ease !important;
+  font-weight: normal !important;
+}
+
+.dedwards-contact-form input[type="text"],
+.dedwards-contact-form input[type="email"],
+.dedwards-contact-form input[type="tel"],
+.dedwards-contact-form input[type="url"],
+.dedwards-contact-form textarea,
+.dedwards-contact-form .wpcf7-form-control {
+  width: 100% !important;
+  background-color: transparent !important;
+  border: none !important;
+  border-bottom: 1px solid #e7e5e4 !important; /* stone-200 */
+  padding-top: 0.75rem !important;
+  padding-bottom: 0.75rem !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  color: #292524 !important; /* stone-800 */
+  border-radius: 0 !important;
+  font-family: 'Playfair Display', serif !important;
+  font-size: 1.125rem !important;
+  transition: border-color 0.3s ease !important;
+  box-shadow: none !important;
+}
+
+.dedwards-contact-form input[type="text"]:focus,
+.dedwards-contact-form input[type="email"]:focus,
+.dedwards-contact-form input[type="tel"]:focus,
+.dedwards-contact-form input[type="url"]:focus,
+.dedwards-contact-form textarea:focus,
+.dedwards-contact-form .wpcf7-form-control:focus {
+  outline: none !important;
+  border-bottom-color: #ca8a04 !important; /* bronze-600 */
+  box-shadow: none !important;
+}
+
+.dedwards-contact-form textarea,
+.dedwards-contact-form textarea.wpcf7-form-control {
+  resize: none !important;
+  min-height: 120px !important;
+}
+
+.dedwards-contact-form input[type="submit"],
+.dedwards-contact-form .wpcf7-submit {
+  background-color: #1c1917 !important; /* stone-850 */
+  color: #ffffff !important;
+  padding: 1.25rem 3rem !important;
+  font-size: 10px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.25em !important;
+  border: 0 !important;
+  cursor: pointer !important;
+  transition: background-color 0.5s ease !important;
+  display: block !important;
+  width: auto !important;
+  margin: 2rem auto 0 !important;
+}
+
+.dedwards-contact-form input[type="submit"]:hover,
+.dedwards-contact-form .wpcf7-submit:hover {
+  background-color: #ca8a04 !important; /* bronze-600 */
+}
+
+.dedwards-contact-form .wpcf7-not-valid-tip {
+  font-size: 0.75rem !important;
+  color: #dc2626 !important; /* red-600 */
+  margin-top: 0.25rem !important;
+}
+
+.dedwards-contact-form .wpcf7-response-output {
+  margin-top: 1.5rem !important;
+  padding: 1rem !important;
+  border: 1px solid !important;
+  border-radius: 0.25rem !important;
+  font-size: 0.875rem !important;
+}
+
+.dedwards-contact-form .wpcf7-mail-sent-ok {
+  background-color: #f0fdf4 !important; /* green-50 */
+  border-color: #bbf7d0 !important; /* green-200 */
+  color: #166534 !important; /* green-800 */
+}
+
+.dedwards-contact-form .wpcf7-validation-errors {
+  background-color: #fef2f2 !important; /* red-50 */
+  border-color: #fecaca !important; /* red-200 */
+  color: #991b1b !important; /* red-800 */
+}
+
+.dedwards-contact-form .wpcf7-spam-blocked {
+  @apply bg-yellow-50 border-yellow-200 text-yellow-800;
+}
+
+/* Group focus-within for label color change */
+.dedwards-contact-form p:focus-within label {
+  color: #c2965b !important; /* bronze-600 */
+}
