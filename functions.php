@@ -1970,28 +1970,29 @@ function dedwards_render_adaptive_gallery( $attributes ) {
             <style>
             .masonry-gallery {
                 max-width: 1200px;
-                margin: 0 auto;
+                margin: 0 auto !important;
                 position: relative;
             }
-            .masonry-sizer {
-                width: 33.333%;
+            .masonry-gallery .masonry-sizer {
+                width: 33.333% !important;
             }
-            .masonry-gutter {
-                width: 2%;
+            .masonry-gallery .masonry-gutter {
+                width: 2% !important;
             }
-            .masonry-item {
-                width: 32%;
-                margin-bottom: 2%;
+            .masonry-gallery .masonry-item {
+                width: 32% !important;
+                margin-bottom: 2% !important;
+                float: left;
             }
             @media (max-width: 768px) {
-                .masonry-sizer {
-                    width: 48%;
+                .masonry-gallery .masonry-sizer {
+                    width: 48% !important;
                 }
-                .masonry-item {
-                    width: 48%;
+                .masonry-gallery .masonry-item {
+                    width: 48% !important;
                 }
-                .masonry-gutter {
-                    width: 4%;
+                .masonry-gallery .masonry-gutter {
+                    width: 4% !important;
                 }
             }
             </style>
