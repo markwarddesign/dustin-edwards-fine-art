@@ -1347,7 +1347,7 @@ function dedwards_render_work_hero( $attributes, $content, $block ) {
                         </div>
                     </div>
 
-                    <a href="<?php echo esc_url( home_url( '/contact' ) ); ?>" class="block w-full bg-stone-900 text-white py-5 px-8 text-xs uppercase tracking-[0.25em] hover:bg-bronze-600 transition-colors text-center">
+                    <a href="<?php echo esc_url( home_url( '/inquire' ) ); ?>" class="block w-full bg-stone-900 text-white py-5 px-8 text-xs uppercase tracking-[0.25em] hover:bg-bronze-600 transition-colors text-center">
                         Inquire About This Piece
                     </a>
                 </div>
