@@ -58,6 +58,7 @@ $in_progress = new WP_Query( array(
                         if ( ! $featured_image ) {
                             $featured_image = 'https://images.unsplash.com/photo-1628607153673-455b550117d9?q=80&w=1500&auto=format&fit=crop';
                         }
+                        $is_transitional = has_term( 'transitional-art', 'work_category', get_the_ID() );
                         ?>
                         <a href="<?php the_permalink(); ?>" class="group cursor-pointer block">
                             <div class="relative overflow-hidden aspect-[4/5] bg-stone-200 shadow-xl">
@@ -67,6 +68,11 @@ $in_progress = new WP_Query( array(
                                     class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
                                     alt="<?php echo esc_attr( get_the_title() ); ?>"
                                 />
+                                <?php if ( $is_transitional ) : ?>
+                                <div class="absolute top-3 left-3 z-20 bg-stone-700/80 backdrop-blur-sm text-stone-100 text-[9px] uppercase tracking-[0.2em] px-3 py-1.5">
+                                    Transitional Art
+                                </div>
+                                <?php endif; ?>
                             </div>
                             <div class="mt-6 flex flex-col items-center text-center">
                                 <h3 class="font-serif text-2xl italic text-stone-800"><?php the_title(); ?></h3>
@@ -132,6 +138,7 @@ $in_progress = new WP_Query( array(
                             if ( ! $featured_image ) {
                                 $featured_image = 'https://images.unsplash.com/photo-1628607153673-455b550117d9?q=80&w=1500&auto=format&fit=crop';
                             }
+                            $is_transitional = has_term( 'transitional-art', 'work_category', get_the_ID() );
                             ?>
                             <a href="<?php the_permalink(); ?>" class="group cursor-pointer block">
                                 <div class="relative overflow-hidden aspect-[4/5] bg-stone-200 shadow-xl">
@@ -141,8 +148,15 @@ $in_progress = new WP_Query( array(
                                         class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
                                         alt="<?php echo esc_attr( get_the_title() ); ?>"
                                     />
-                                    <div class="absolute top-3 left-3 z-20 bg-stone-900/80 backdrop-blur-sm text-bronze-300 text-[9px] uppercase tracking-[0.2em] px-3 py-1.5">
-                                        In Progress
+                                    <div class="absolute top-3 left-3 z-20 flex flex-col gap-1.5">
+                                        <div class="bg-stone-900/80 backdrop-blur-sm text-bronze-300 text-[9px] uppercase tracking-[0.2em] px-3 py-1.5">
+                                            In Progress
+                                        </div>
+                                        <?php if ( $is_transitional ) : ?>
+                                        <div class="bg-stone-700/80 backdrop-blur-sm text-stone-100 text-[9px] uppercase tracking-[0.2em] px-3 py-1.5">
+                                            Transitional Art
+                                        </div>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                                 <div class="mt-6 flex flex-col items-center text-center">

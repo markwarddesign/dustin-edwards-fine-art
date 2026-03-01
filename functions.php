@@ -1299,6 +1299,7 @@ function dedwards_render_collection_section( $attributes ) {
                         if ( ! $featured_image ) {
                             $featured_image = 'https://images.unsplash.com/photo-1628607153673-455b550117d9?q=80&w=1500&auto=format&fit=crop';
                         }
+                        $is_transitional = has_term( 'transitional-art', 'work_category', get_the_ID() );
                         ?>
                         <a href="<?php the_permalink(); ?>" class="group cursor-pointer block">
                             <div class="relative overflow-hidden aspect-[4/5] bg-stone-200 shadow-xl">
@@ -1308,6 +1309,11 @@ function dedwards_render_collection_section( $attributes ) {
                                     class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
                                     alt="<?php echo esc_attr( get_the_title() ); ?>"
                                 />
+                                <?php if ( $is_transitional ) : ?>
+                                <div class="absolute top-3 left-3 z-20 bg-stone-700/80 backdrop-blur-sm text-stone-100 text-[9px] uppercase tracking-[0.2em] px-3 py-1.5">
+                                    Transitional Art
+                                </div>
+                                <?php endif; ?>
                             </div>
                             <div class="mt-6 flex flex-col items-center text-center">
                                 <h3 class="font-serif text-2xl italic text-stone-800"><?php the_title(); ?></h3>
@@ -1381,6 +1387,7 @@ function dedwards_render_collection_section( $attributes ) {
                             if ( ! $featured_image ) {
                                 $featured_image = 'https://images.unsplash.com/photo-1628607153673-455b550117d9?q=80&w=1500&auto=format&fit=crop';
                             }
+                            $is_transitional = has_term( 'transitional-art', 'work_category', get_the_ID() );
                             ?>
                             <a href="<?php the_permalink(); ?>" class="group cursor-pointer block">
                                 <div class="relative overflow-hidden aspect-[4/5] bg-stone-200 shadow-xl">
@@ -1390,8 +1397,15 @@ function dedwards_render_collection_section( $attributes ) {
                                         class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
                                         alt="<?php echo esc_attr( get_the_title() ); ?>"
                                     />
-                                    <div class="absolute top-3 left-3 z-20 bg-stone-900/80 backdrop-blur-sm text-bronze-300 text-[9px] uppercase tracking-[0.2em] px-3 py-1.5">
-                                        In Progress
+                                    <div class="absolute top-3 left-3 z-20 flex flex-col gap-1.5">
+                                        <div class="bg-stone-900/80 backdrop-blur-sm text-bronze-300 text-[9px] uppercase tracking-[0.2em] px-3 py-1.5">
+                                            In Progress
+                                        </div>
+                                        <?php if ( $is_transitional ) : ?>
+                                        <div class="bg-stone-700/80 backdrop-blur-sm text-stone-100 text-[9px] uppercase tracking-[0.2em] px-3 py-1.5">
+                                            Transitional Art
+                                        </div>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                                 <div class="mt-6 flex flex-col items-center text-center">
@@ -1447,7 +1461,8 @@ function dedwards_render_work_hero( $attributes, $content, $block ) {
     $detail_image_1 = $attributes['detailImage1']['url'] ?? $featured_image;
     $detail_image_2 = $attributes['detailImage2']['url'] ?? $featured_image;
     
-    $is_in_progress = has_term( 'in-progress', 'work_category', $post_id );
+    $is_in_progress  = has_term( 'in-progress', 'work_category', $post_id );
+    $is_transitional   = has_term( 'transitional-art', 'work_category', $post_id );
     
     ob_start();
     ?>
@@ -1478,10 +1493,19 @@ function dedwards_render_work_hero( $attributes, $content, $block ) {
 
                 <!-- Right: Info -->
                 <div class="lg:col-span-7 lg:sticky lg:top-32 h-fit pt-8">
-                    <?php if ( $is_in_progress ) : ?>
-                    <span class="inline-block text-[9px] uppercase tracking-[0.2em] text-bronze-600 border border-bronze-300 px-3 py-1.5 mb-5">
-                        Work in Progress
-                    </span>
+                    <?php if ( $is_in_progress || $is_transitional ) : ?>
+                    <div class="flex flex-wrap gap-2 mb-5">
+                        <?php if ( $is_in_progress ) : ?>
+                        <span class="inline-block text-[9px] uppercase tracking-[0.2em] text-bronze-600 border border-bronze-300 px-3 py-1.5">
+                            Work in Progress
+                        </span>
+                        <?php endif; ?>
+                        <?php if ( $is_transitional ) : ?>
+                        <span class="inline-block text-[9px] uppercase tracking-[0.2em] text-stone-500 border border-stone-300 px-3 py-1.5">
+                            Transitional Art
+                        </span>
+                        <?php endif; ?>
+                    </div>
                     <?php endif; ?>
                     <h1 class="font-serif italic text-4xl md:text-6xl text-stone-900 mb-6">
                         <?php echo esc_html( $title ); ?>
