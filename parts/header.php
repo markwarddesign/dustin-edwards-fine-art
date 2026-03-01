@@ -7,13 +7,18 @@
         <!-- Desktop Menu -->
         <div class="hidden lg:flex gap-12 text-xs uppercase tracking-widest font-semibold">
             <?php
-            wp_nav_menu( array(
-                'theme_location' => 'primary',
-                'container' => false,
-                'menu_class' => 'flex gap-12',
-                'walker' => new Dedwards_Nav_Walker(),
-                'fallback_cb' => 'dedwards_fallback_menu',
-            ) );
+            if ( has_nav_menu( 'primary' ) ) {
+                wp_nav_menu( array(
+                    'theme_location' => 'primary',
+                    'container' => false,
+                    'menu_class' => '',
+                    'items_wrap' => '%3$s',
+                    'link_before' => '<span class="hover:text-bronze-300 transition-colors">',
+                    'link_after' => '</span>',
+                ) );
+            } else {
+                dedwards_fallback_menu();
+            }
             ?>
         </div>
         
@@ -35,13 +40,18 @@
     </button>
     <div class="flex flex-col items-center justify-center h-full gap-6 text-center">
         <?php
-        wp_nav_menu( array(
-            'theme_location' => 'primary',
-            'container' => false,
-            'menu_class' => 'flex flex-col gap-6',
-            'walker' => new Dedwards_Nav_Walker(),
-            'fallback_cb' => 'dedwards_mobile_fallback_menu',
-        ) );
+        if ( has_nav_menu( 'primary' ) ) {
+            wp_nav_menu( array(
+                'theme_location' => 'primary',
+                'container' => false,
+                'menu_class' => '',
+                'items_wrap' => '%3$s',
+                'link_before' => '<span class="text-bronze-300 hover:text-white text-lg font-display font-semibold uppercase tracking-[0.2em] transition-colors">',
+                'link_after' => '</span>',
+            ) );
+        } else {
+            dedwards_mobile_fallback_menu();
+        }
         ?>
     </div>
 </div>

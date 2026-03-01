@@ -78,92 +78,25 @@ function dedwards_theme_support() {
 add_action( 'after_setup_theme', 'dedwards_theme_support' );
 
 /**
- * Custom navigation walker for styled menus
- */
-class Dedwards_Nav_Walker extends Walker_Nav_Menu {
-    
-    // Start Level - wrap in <ul>
-    function start_lvl( &$output, $depth = 0, $args = null ) {
-        $indent = str_repeat( "\t", $depth );
-        $output .= "\n$indent<ul class=\"sub-menu\">\n";
-    }
-    
-    // End Level - close </ul>
-    function end_lvl( &$output, $depth = 0, $args = null ) {
-        $indent = str_repeat( "\t", $depth );
-        $output .= "$indent</ul>\n";
-    }
-    
-    // Start Element - each <li>
-    function start_el( &$output, $item, $depth = 0, $args = null, $id = 0 ) {
-        $indent = ( $depth ) ? str_repeat( "\t", $depth ) : '';
-        $class_names = $value = '';
-        $classes = empty( $item->classes ) ? array() : (array) $item->classes;
-        $classes[] = 'menu-item-' . $item->ID;
-        
-        // Check if it's mobile menu
-        $is_mobile = strpos( $args->menu_class ?? '', 'flex-col' ) !== false;
-        
-        $class_names = join( ' ', apply_filters( 'nav_menu_css_class', array_filter( $classes ), $item, $args ) );
-        $class_names = $class_names ? ' class="' . esc_attr( $class_names ) . '"' : '';
-        
-        $id = apply_filters( 'nav_menu_item_id', 'menu-item-'. $item->ID, $item, $args );
-        $id = $id ? ' id="' . esc_attr( $id ) . '"' : '';
-        
-        $indent = ( $depth ) ? str_repeat( "\t", $depth ) : '';
-        
-        $output .= $indent . '<li' . $id . $value . $class_names .'>';
-        
-        $attributes = ! empty( $item->attr_title ) ? ' title="'  . esc_attr( $item->attr_title ) .'"' : '';
-        $attributes .= ! empty( $item->target )     ? ' target="' . esc_attr( $item->target     ) .'"' : '';
-        $attributes .= ! empty( $item->xfn )        ? ' rel="'    . esc_attr( $item->xfn        ) .'"' : '';
-        $attributes .= ! empty( $item->url )        ? ' href="'   . esc_attr( $item->url        ) .'"' : '';
-        
-        $item_output = $args->before ?? '';
-        
-        if ( $is_mobile ) {
-            $item_output .= '<a' . $attributes . ' class="text-bronze-300 hover:text-white text-lg font-display font-semibold uppercase tracking-[0.2em] transition-colors">';
-        } else {
-            $item_output .= '<a' . $attributes . ' class="hover:text-bronze-300 transition-colors">';
-        }
-        
-        $item_output .= ( $args->link_before ?? '' ) . apply_filters( 'the_title', $item->title, $item->ID ) . ( $args->link_after ?? '' );
-        $item_output .= '</a>';
-        $item_output .= $args->after ?? '';
-        
-        $output .= apply_filters( 'walker_nav_menu_start_el', $item_output, $item, $depth, $args );
-    }
-    
-    // End Element - close </li>
-    function end_el( &$output, $item, $depth = 0, $args = null ) {
-        $output .= "</li>\n";
-    }
-}
-
-/**
  * Fallback menu function
  */
 function dedwards_fallback_menu() {
-    echo '<ul class="flex gap-12">';
-    echo '<li><a href="' . esc_url( home_url( '/' ) ) . '" class="hover:text-bronze-300 transition-colors">Home</a></li>';
-    echo '<li><a href="' . esc_url( home_url( '/collection' ) ) . '" class="hover:text-bronze-300 transition-colors">Collection</a></li>';
-    echo '<li><a href="' . esc_url( home_url( '/the-artist' ) ) . '" class="hover:text-bronze-300 transition-colors">The Artist</a></li>';
-    echo '<li><a href="' . esc_url( home_url( '/philosophy' ) ) . '" class="hover:text-bronze-300 transition-colors">Philosophy</a></li>';
-    echo '<li><a href="' . esc_url( home_url( '/inquire' ) ) . '" class="hover:text-bronze-300 transition-colors">Inquire</a></li>';
-    echo '</ul>';
+    echo '<a href="' . esc_url( home_url( '/' ) ) . '" class="hover:text-bronze-300 transition-colors">Home</a>';
+    echo '<a href="' . esc_url( home_url( '/collection' ) ) . '" class="hover:text-bronze-300 transition-colors">Collection</a>';
+    echo '<a href="' . esc_url( home_url( '/the-artist' ) ) . '" class="hover:text-bronze-300 transition-colors">The Artist</a>';
+    echo '<a href="' . esc_url( home_url( '/philosophy' ) ) . '" class="hover:text-bronze-300 transition-colors">Philosophy</a>';
+    echo '<a href="' . esc_url( home_url( '/inquire' ) ) . '" class="hover:text-bronze-300 transition-colors">Inquire</a>';
 }
 
 /**
  * Mobile fallback menu function
  */
 function dedwards_mobile_fallback_menu() {
-    echo '<ul class="flex flex-col gap-6">';
-    echo '<li><a href="' . esc_url( home_url( '/' ) ) . '" class="text-bronze-300 hover:text-white text-lg font-display font-semibold uppercase tracking-[0.2em] transition-colors">Home</a></li>';
-    echo '<li><a href="' . esc_url( home_url( '/collection' ) ) . '" class="text-bronze-300 hover:text-white text-lg font-display font-semibold uppercase tracking-[0.2em] transition-colors">Collection</a></li>';
-    echo '<li><a href="' . esc_url( home_url( '/the-artist' ) ) . '" class="text-bronze-300 hover:text-white text-lg font-display font-semibold uppercase tracking-[0.2em] transition-colors">The Artist</a></li>';
-    echo '<li><a href="' . esc_url( home_url( '/philosophy' ) ) . '" class="text-bronze-300 hover:text-white text-lg font-display font-semibold uppercase tracking-[0.2em] transition-colors">Philosophy</a></li>';
-    echo '<li><a href="' . esc_url( home_url( '/inquire' ) ) . '" class="text-bronze-300 hover:text-white text-lg font-display font-semibold uppercase tracking-[0.2em] transition-colors">Inquire</a></li>';
-    echo '</ul>';
+    echo '<a href="' . esc_url( home_url( '/' ) ) . '" class="text-bronze-300 hover:text-white text-lg font-display font-semibold uppercase tracking-[0.2em] transition-colors">Home</a>';
+    echo '<a href="' . esc_url( home_url( '/collection' ) ) . '" class="text-bronze-300 hover:text-white text-lg font-display font-semibold uppercase tracking-[0.2em] transition-colors">Collection</a>';
+    echo '<a href="' . esc_url( home_url( '/the-artist' ) ) . '" class="text-bronze-300 hover:text-white text-lg font-display font-semibold uppercase tracking-[0.2em] transition-colors">The Artist</a>';
+    echo '<a href="' . esc_url( home_url( '/philosophy' ) ) . '" class="text-bronze-300 hover:text-white text-lg font-display font-semibold uppercase tracking-[0.2em] transition-colors">Philosophy</a>';
+    echo '<a href="' . esc_url( home_url( '/inquire' ) ) . '" class="text-bronze-300 hover:text-white text-lg font-display font-semibold uppercase tracking-[0.2em] transition-colors">Inquire</a>';
 }
 
 /**
