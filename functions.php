@@ -1539,11 +1539,11 @@ function dedwards_render_work_hero( $attributes, $content, $block ) {
                             <?php endforeach; ?>
 
                             <?php if ( $has_multiple ) : ?>
-                            <button class="work-gallery__prev absolute z-10 bg-white hover:bg-stone-100 shadow-lg transition-colors flex items-center justify-center" style="left:12px;top:50%;transform:translateY(-50%);width:48px;height:48px;" aria-label="Previous image">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15,18 9,12 15,6"/></svg>
+                            <button class="work-gallery__prev absolute z-10 transition-colors flex items-center justify-center" style="left:12px;top:50%;transform:translateY(-50%);width:48px;height:48px;background:rgba(0,0,0,0.45);" onmouseover="this.style.background='rgba(0,0,0,0.7)'" onmouseout="this.style.background='rgba(0,0,0,0.45)'" aria-label="Previous image">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15,18 9,12 15,6"/></svg>
                             </button>
-                            <button class="work-gallery__next absolute z-10 bg-white hover:bg-stone-100 shadow-lg transition-colors flex items-center justify-center" style="right:12px;top:50%;transform:translateY(-50%);width:48px;height:48px;" aria-label="Next image">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9,18 15,12 9,6"/></svg>
+                            <button class="work-gallery__next absolute z-10 transition-colors flex items-center justify-center" style="right:12px;top:50%;transform:translateY(-50%);width:48px;height:48px;background:rgba(0,0,0,0.45);" onmouseover="this.style.background='rgba(0,0,0,0.7)'" onmouseout="this.style.background='rgba(0,0,0,0.45)'" aria-label="Next image">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9,18 15,12 9,6"/></svg>
                             </button>
                             <?php endif; ?>
                         </div>
