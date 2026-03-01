@@ -38,7 +38,7 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
         </svg>
     </button>
-    <div class="flex flex-col items-center justify-center h-full gap-6 text-center">
+    <div class="flex flex-col items-center justify-center h-full gap-8 text-center">
         <?php
         if ( has_nav_menu( 'primary' ) ) {
             wp_nav_menu( array(
@@ -46,7 +46,7 @@
                 'container' => false,
                 'menu_class' => '',
                 'items_wrap' => '%3$s',
-                'link_before' => '<span class="text-bronze-300 hover:text-white text-lg font-display font-semibold uppercase tracking-[0.2em] transition-colors">',
+                'link_before' => '<span class="text-bronze-300 hover:text-white text-5xl font-display font-semibold uppercase tracking-[0.2em] transition-colors">',
                 'link_after' => '</span>',
             ) );
         } else {

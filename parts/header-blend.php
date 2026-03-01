@@ -6,11 +6,20 @@
         
         <!-- Desktop Menu -->
         <div class="hidden lg:flex gap-12 text-xs uppercase tracking-widest font-semibold">
-            <a href="/" class="hover:text-bronze-300 transition-colors">Home</a>
-            <a href="/collection" class="hover:text-bronze-300 transition-colors">Collection</a>
-            <a href="/the-artist" class="hover:text-bronze-300 transition-colors">The Artist</a>
-            <a href="/philosophy" class="hover:text-bronze-300 transition-colors">Philosophy</a>
-            <a href="/inquire" class="hover:text-bronze-300 transition-colors">Inquire</a>
+            <?php
+            if ( has_nav_menu( 'primary' ) ) {
+                wp_nav_menu( array(
+                    'theme_location' => 'primary',
+                    'container' => false,
+                    'menu_class' => '',
+                    'items_wrap' => '%3$s',
+                    'link_before' => '<span class="hover:text-bronze-300 transition-colors">',
+                    'link_after' => '</span>',
+                ) );
+            } else {
+                dedwards_fallback_menu();
+            }
+            ?>
         </div>
         
         <!-- Mobile Menu Button -->
@@ -30,10 +39,19 @@
         </svg>
     </button>
     <div class="flex flex-col items-center justify-center h-full gap-8 text-center">
-        <a href="/" class="text-bronze-300 hover:text-white text-lg font-display font-semibold uppercase tracking-[0.2em] transition-colors">Home</a>
-        <a href="/collection" class="text-bronze-300 hover:text-white text-lg font-display font-semibold uppercase tracking-[0.2em] transition-colors">Collection</a>
-        <a href="/the-artist" class="text-bronze-300 hover:text-white text-lg font-display font-semibold uppercase tracking-[0.2em] transition-colors">The Artist</a>
-        <a href="/philosophy" class="text-bronze-300 hover:text-white text-lg font-display font-semibold uppercase tracking-[0.2em] transition-colors">Philosophy</a>
-        <a href="/inquire" class="text-bronze-300 hover:text-white text-lg font-display font-semibold uppercase tracking-[0.2em] transition-colors">Inquire</a>
+        <?php
+        if ( has_nav_menu( 'primary' ) ) {
+            wp_nav_menu( array(
+                'theme_location' => 'primary',
+                'container' => false,
+                'menu_class' => '',
+                'items_wrap' => '%3$s',
+                'link_before' => '<span class="text-bronze-300 hover:text-white text-5xl font-display font-semibold uppercase tracking-[0.2em] transition-colors">',
+                'link_after' => '</span>',
+            ) );
+        } else {
+            dedwards_mobile_fallback_menu();
+        }
+        ?>
     </div>
 </div>

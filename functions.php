@@ -92,11 +92,11 @@ function dedwards_fallback_menu() {
  * Mobile fallback menu function
  */
 function dedwards_mobile_fallback_menu() {
-    echo '<a href="' . esc_url( home_url( '/' ) ) . '" class="text-bronze-300 hover:text-white text-lg font-display font-semibold uppercase tracking-[0.2em] transition-colors">Home</a>';
-    echo '<a href="' . esc_url( home_url( '/collection' ) ) . '" class="text-bronze-300 hover:text-white text-lg font-display font-semibold uppercase tracking-[0.2em] transition-colors">Collection</a>';
-    echo '<a href="' . esc_url( home_url( '/the-artist' ) ) . '" class="text-bronze-300 hover:text-white text-lg font-display font-semibold uppercase tracking-[0.2em] transition-colors">The Artist</a>';
-    echo '<a href="' . esc_url( home_url( '/philosophy' ) ) . '" class="text-bronze-300 hover:text-white text-lg font-display font-semibold uppercase tracking-[0.2em] transition-colors">Philosophy</a>';
-    echo '<a href="' . esc_url( home_url( '/inquire' ) ) . '" class="text-bronze-300 hover:text-white text-lg font-display font-semibold uppercase tracking-[0.2em] transition-colors">Inquire</a>';
+    echo '<a href="' . esc_url( home_url( '/' ) ) . '" class="text-bronze-300 hover:text-white text-5xl font-display font-semibold uppercase tracking-[0.2em] transition-colors">Home</a>';
+    echo '<a href="' . esc_url( home_url( '/collection' ) ) . '" class="text-bronze-300 hover:text-white text-5xl font-display font-semibold uppercase tracking-[0.2em] transition-colors">Collection</a>';
+    echo '<a href="' . esc_url( home_url( '/the-artist' ) ) . '" class="text-bronze-300 hover:text-white text-5xl font-display font-semibold uppercase tracking-[0.2em] transition-colors">The Artist</a>';
+    echo '<a href="' . esc_url( home_url( '/philosophy' ) ) . '" class="text-bronze-300 hover:text-white text-5xl font-display font-semibold uppercase tracking-[0.2em] transition-colors">Philosophy</a>';
+    echo '<a href="' . esc_url( home_url( '/inquire' ) ) . '" class="text-bronze-300 hover:text-white text-5xl font-display font-semibold uppercase tracking-[0.2em] transition-colors">Inquire</a>';
 }
 
 /**
