@@ -1270,41 +1270,22 @@ function dedwards_render_collection_section( $attributes ) {
     $is_archive = is_post_type_archive( 'work' );
 
     if ( $is_archive ) {
-        // On the archive, get the selected category from the URL param
         $selected_cat_slug = isset( $_GET['cat'] ) ? sanitize_key( $_GET['cat'] ) : '';
 
-        // Fetch all non-internal categories for the filter tabs
+        // All categories including in-progress for the filter tabs
         $filter_cats = get_terms( array(
             'taxonomy'   => 'work_category',
             'hide_empty' => true,
-            'exclude'    => array( get_term_by( 'slug', 'in-progress', 'work_category' )->term_id ?? 0 ),
         ) );
 
-        // Build unified query: if a category is selected, filter to it (plus in-progress always at end)
-        // If no category selected: all non-in-progress + in-progress appended
-        $regular_args = array(
+        // Single query — all works, optionally filtered by category
+        $all_args = array(
             'post_type'      => 'work',
             'posts_per_page' => -1,
             'post_status'    => 'publish',
-            'tax_query'      => array(
-                array(
-                    'taxonomy' => 'work_category',
-                    'field'    => 'slug',
-                    'terms'    => 'in-progress',
-                    'operator' => 'NOT IN',
-                ),
-            ),
         );
-
         if ( $selected_cat_slug ) {
-            $regular_args['tax_query'] = array(
-                'relation' => 'AND',
-                array(
-                    'taxonomy' => 'work_category',
-                    'field'    => 'slug',
-                    'terms'    => 'in-progress',
-                    'operator' => 'NOT IN',
-                ),
+            $all_args['tax_query'] = array(
                 array(
                     'taxonomy' => 'work_category',
                     'field'    => 'slug',
@@ -1312,21 +1293,7 @@ function dedwards_render_collection_section( $attributes ) {
                 ),
             );
         }
-
-        $regular_works  = new WP_Query( $regular_args );
-
-        $progress_works = new WP_Query( array(
-            'post_type'      => 'work',
-            'posts_per_page' => -1,
-            'post_status'    => 'publish',
-            'tax_query'      => array(
-                array(
-                    'taxonomy' => 'work_category',
-                    'field'    => 'slug',
-                    'terms'    => 'in-progress',
-                ),
-            ),
-        ) );
+        $all_works = new WP_Query( $all_args );
 
         $archive_url = get_post_type_archive_link( 'work' );
 
@@ -1353,21 +1320,28 @@ function dedwards_render_collection_section( $attributes ) {
 
                 <!-- Unified Grid -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-24 gap-x-12">
-
-                    <?php if ( $regular_works->have_posts() ) : ?>
-                        <?php while ( $regular_works->have_posts() ) : $regular_works->the_post(); ?>
+                    <?php if ( $all_works->have_posts() ) : ?>
+                        <?php while ( $all_works->have_posts() ) : $all_works->the_post(); ?>
                             <?php
-                            $material = get_post_meta( get_the_ID(), '_work_material', true ) ?: 'Bronze';
-                            $featured_image = get_the_post_thumbnail_url( get_the_ID(), 'large' );
+                            $material        = get_post_meta( get_the_ID(), '_work_material', true ) ?: 'Bronze';
+                            $featured_image  = get_the_post_thumbnail_url( get_the_ID(), 'large' );
                             if ( ! $featured_image ) $featured_image = 'https://images.unsplash.com/photo-1628607153673-455b550117d9?q=80&w=1500&auto=format&fit=crop';
+                            $is_in_progress  = has_term( 'in-progress', 'work_category', get_the_ID() );
                             $is_transitional = has_term( 'transitional-art', 'work_category', get_the_ID() );
                             ?>
                             <a href="<?php the_permalink(); ?>" class="group cursor-pointer block">
                                 <div class="relative overflow-hidden aspect-[4/5] bg-stone-200 shadow-xl">
                                     <div class="absolute inset-0 bg-stone-900/10 group-hover:bg-transparent transition-colors z-10"></div>
                                     <img src="<?php echo esc_url( $featured_image ); ?>" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" alt="<?php echo esc_attr( get_the_title() ); ?>"/>
-                                    <?php if ( $is_transitional ) : ?>
-                                    <div class="absolute top-3 left-3 z-20 bg-stone-700/80 backdrop-blur-sm text-stone-100 text-[9px] uppercase tracking-[0.2em] px-3 py-1.5">Transitional Art</div>
+                                    <?php if ( $is_in_progress || $is_transitional ) : ?>
+                                    <div class="absolute top-3 left-3 z-20 flex flex-col gap-1.5">
+                                        <?php if ( $is_in_progress ) : ?>
+                                        <div class="bg-stone-900/80 backdrop-blur-sm text-bronze-300 text-[9px] uppercase tracking-[0.2em] px-3 py-1.5">In Progress</div>
+                                        <?php endif; ?>
+                                        <?php if ( $is_transitional ) : ?>
+                                        <div class="bg-stone-700/80 backdrop-blur-sm text-stone-100 text-[9px] uppercase tracking-[0.2em] px-3 py-1.5">Transitional Art</div>
+                                        <?php endif; ?>
+                                    </div>
                                     <?php endif; ?>
                                 </div>
                                 <div class="mt-6 flex flex-col items-center text-center">
@@ -1376,39 +1350,9 @@ function dedwards_render_collection_section( $attributes ) {
                                 </div>
                             </a>
                         <?php endwhile; wp_reset_postdata(); ?>
-                    <?php endif; ?>
-
-                    <?php if ( empty( $selected_cat_slug ) && $progress_works->have_posts() ) : ?>
-                        <?php while ( $progress_works->have_posts() ) : $progress_works->the_post(); ?>
-                            <?php
-                            $material = get_post_meta( get_the_ID(), '_work_material', true ) ?: 'Bronze';
-                            $featured_image = get_the_post_thumbnail_url( get_the_ID(), 'large' );
-                            if ( ! $featured_image ) $featured_image = 'https://images.unsplash.com/photo-1628607153673-455b550117d9?q=80&w=1500&auto=format&fit=crop';
-                            $is_transitional = has_term( 'transitional-art', 'work_category', get_the_ID() );
-                            ?>
-                            <a href="<?php the_permalink(); ?>" class="group cursor-pointer block">
-                                <div class="relative overflow-hidden aspect-[4/5] bg-stone-200 shadow-xl">
-                                    <div class="absolute inset-0 bg-stone-900/10 group-hover:bg-transparent transition-colors z-10"></div>
-                                    <img src="<?php echo esc_url( $featured_image ); ?>" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" alt="<?php echo esc_attr( get_the_title() ); ?>"/>
-                                    <div class="absolute top-3 left-3 z-20 flex flex-col gap-1.5">
-                                        <div class="bg-stone-900/80 backdrop-blur-sm text-bronze-300 text-[9px] uppercase tracking-[0.2em] px-3 py-1.5">In Progress</div>
-                                        <?php if ( $is_transitional ) : ?>
-                                        <div class="bg-stone-700/80 backdrop-blur-sm text-stone-100 text-[9px] uppercase tracking-[0.2em] px-3 py-1.5">Transitional Art</div>
-                                        <?php endif; ?>
-                                    </div>
-                                </div>
-                                <div class="mt-6 flex flex-col items-center text-center">
-                                    <h3 class="font-serif text-2xl italic text-stone-800"><?php the_title(); ?></h3>
-                                    <p class="text-[10px] uppercase tracking-[0.2em] text-bronze-600 mt-2"><?php echo esc_html( $material ); ?></p>
-                                </div>
-                            </a>
-                        <?php endwhile; wp_reset_postdata(); ?>
-                    <?php endif; ?>
-
-                    <?php if ( ! $regular_works->have_posts() && ( ! empty( $selected_cat_slug ) || ! $progress_works->have_posts() ) ) : ?>
+                    <?php else : ?>
                         <p class="col-span-full text-center text-stone-500">No works found in this category.</p>
                     <?php endif; ?>
-
                 </div>
 
                 <!-- CTA Section -->
