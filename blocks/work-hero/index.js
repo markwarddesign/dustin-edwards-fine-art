@@ -10,8 +10,13 @@ registerBlockType('dedwards/work-hero', {
             className: 'bg-white'
         });
 
-        const { detailImage1, detailImage2, detailImage3 } = attributes;
         const postId = context.postId;
+
+        // Parse a JSON image meta string into {id, url} or null
+        const parseImageMeta = (raw) => {
+            if ( ! raw ) return null;
+            try { return JSON.parse( raw ); } catch { return null; }
+        };
 
         const { editEntityRecord } = useDispatch('core');
 
@@ -30,10 +35,14 @@ registerBlockType('dedwards/work-hero', {
             };
         }, [postId]);
 
-        const material = meta?._work_material || '';
-        const year = meta?._work_year || '';
-        const dimensions = meta?._work_dimensions || '';
-        const edition = meta?._work_edition || '';
+        const material    = meta?._work_material    || '';
+        const year         = meta?._work_year         || '';
+        const dimensions   = meta?._work_dimensions   || '';
+        const edition      = meta?._work_edition      || '';
+
+        const detailImage1 = parseImageMeta( meta?._work_detail_image_1 );
+        const detailImage2 = parseImageMeta( meta?._work_detail_image_2 );
+        const detailImage3 = parseImageMeta( meta?._work_detail_image_3 );
 
         // Update meta fields
         const updateMeta = (key, value) => {
@@ -94,7 +103,7 @@ registerBlockType('dedwards/work-hero', {
                                 )}
                                 <MediaUploadCheck>
                                     <MediaUpload
-                                        onSelect={(media) => setAttributes({ detailImage1: { id: media.id, url: media.url } })}
+                                        onSelect={(media) => updateMeta('_work_detail_image_1', JSON.stringify({ id: media.id, url: media.url }))}
                                         allowedTypes={['image']}
                                         value={detailImage1?.id}
                                         render={({ open }) => (
@@ -103,7 +112,7 @@ registerBlockType('dedwards/work-hero', {
                                                     {detailImage1 ? 'Change Image' : 'Add Image'}
                                                 </Button>
                                                 {detailImage1 && (
-                                                    <Button variant="tertiary" isDestructive onClick={() => setAttributes({ detailImage1: null })}>
+                                                    <Button variant="tertiary" isDestructive onClick={() => updateMeta('_work_detail_image_1', '')}>
                                                         Remove
                                                     </Button>
                                                 )}
@@ -119,7 +128,7 @@ registerBlockType('dedwards/work-hero', {
                                 )}
                                 <MediaUploadCheck>
                                     <MediaUpload
-                                        onSelect={(media) => setAttributes({ detailImage2: { id: media.id, url: media.url } })}
+                                        onSelect={(media) => updateMeta('_work_detail_image_2', JSON.stringify({ id: media.id, url: media.url }))}
                                         allowedTypes={['image']}
                                         value={detailImage2?.id}
                                         render={({ open }) => (
@@ -128,7 +137,7 @@ registerBlockType('dedwards/work-hero', {
                                                     {detailImage2 ? 'Change Image' : 'Add Image'}
                                                 </Button>
                                                 {detailImage2 && (
-                                                    <Button variant="tertiary" isDestructive onClick={() => setAttributes({ detailImage2: null })}>
+                                                    <Button variant="tertiary" isDestructive onClick={() => updateMeta('_work_detail_image_2', '')}>
                                                         Remove
                                                     </Button>
                                                 )}
@@ -144,7 +153,7 @@ registerBlockType('dedwards/work-hero', {
                                 )}
                                 <MediaUploadCheck>
                                     <MediaUpload
-                                        onSelect={(media) => setAttributes({ detailImage3: { id: media.id, url: media.url } })}
+                                        onSelect={(media) => updateMeta('_work_detail_image_3', JSON.stringify({ id: media.id, url: media.url }))}
                                         allowedTypes={['image']}
                                         value={detailImage3?.id}
                                         render={({ open }) => (
@@ -153,7 +162,7 @@ registerBlockType('dedwards/work-hero', {
                                                     {detailImage3 ? 'Change Image' : 'Add Image'}
                                                 </Button>
                                                 {detailImage3 && (
-                                                    <Button variant="tertiary" isDestructive onClick={() => setAttributes({ detailImage3: null })}>
+                                                    <Button variant="tertiary" isDestructive onClick={() => updateMeta('_work_detail_image_3', '')}>
                                                         Remove
                                                     </Button>
                                                 )}
@@ -212,7 +221,7 @@ registerBlockType('dedwards/work-hero', {
                                         />
                                     </MediaUploadCheck>
                                 </div>
-                                <div className="grid grid-cols-3 gap-4">
+                                <div className="grid grid-cols-3 gap-4"> {/* detail images — saved to post meta */}
                                     <div className="bg-stone-200 aspect-square overflow-hidden relative border-2 border-dashed border-transparent hover:border-blue-400 transition-all group">
                                         <MediaUploadCheck>
                                             <MediaUpload

@@ -937,6 +937,29 @@ function dedwards_register_work_meta_rest() {
         'single' => true,
         'type' => 'string',
     ) );
+
+    // Detail images stored as JSON strings {"id":123,"url":"https://..."}
+    register_post_meta( 'work', '_work_detail_image_1', array(
+        'show_in_rest' => true,
+        'single'       => true,
+        'type'         => 'string',
+        'default'      => '',
+        'auth_callback' => function() { return current_user_can( 'edit_posts' ); },
+    ) );
+    register_post_meta( 'work', '_work_detail_image_2', array(
+        'show_in_rest' => true,
+        'single'       => true,
+        'type'         => 'string',
+        'default'      => '',
+        'auth_callback' => function() { return current_user_can( 'edit_posts' ); },
+    ) );
+    register_post_meta( 'work', '_work_detail_image_3', array(
+        'show_in_rest' => true,
+        'single'       => true,
+        'type'         => 'string',
+        'default'      => '',
+        'auth_callback' => function() { return current_user_can( 'edit_posts' ); },
+    ) );
 }
 add_action( 'init', 'dedwards_register_work_meta_rest' );
 
@@ -1457,9 +1480,18 @@ function dedwards_render_work_hero( $attributes, $content, $block ) {
         $featured_image = 'https://images.unsplash.com/photo-1628607153673-455b550117d9?q=80&w=1500&auto=format&fit=crop';
     }
     
-    // Detail images from block attributes
-    $detail_image_1 = $attributes['detailImage1']['url'] ?? $featured_image;
-    $detail_image_2 = $attributes['detailImage2']['url'] ?? $featured_image;
+    // Detail images from post meta (stored as JSON {"id":123,"url":"https://..."})
+    $detail_1_raw   = get_post_meta( $post_id, '_work_detail_image_1', true );
+    $detail_1       = $detail_1_raw ? json_decode( $detail_1_raw, true ) : null;
+    $detail_image_1 = $detail_1['url'] ?? null;
+
+    $detail_2_raw   = get_post_meta( $post_id, '_work_detail_image_2', true );
+    $detail_2       = $detail_2_raw ? json_decode( $detail_2_raw, true ) : null;
+    $detail_image_2 = $detail_2['url'] ?? null;
+
+    $detail_3_raw   = get_post_meta( $post_id, '_work_detail_image_3', true );
+    $detail_3       = $detail_3_raw ? json_decode( $detail_3_raw, true ) : null;
+    $detail_image_3 = $detail_3['url'] ?? null;
     
     $is_in_progress  = has_term( 'in-progress', 'work_category', $post_id );
     $is_transitional   = has_term( 'transitional-art', 'work_category', $post_id );
@@ -1481,14 +1513,25 @@ function dedwards_render_work_hero( $attributes, $content, $block ) {
                     <div class="bg-stone-100 aspect-[4/5] overflow-hidden relative">
                         <img src="<?php echo esc_url( $featured_image ); ?>" class="w-full h-full object-cover" alt="<?php echo esc_attr( $title ); ?>">
                     </div>
-                    <div class="grid grid-cols-2 gap-4">
+                    <?php if ( $detail_image_1 || $detail_image_2 || $detail_image_3 ) : ?>
+                    <div class="grid grid-cols-3 gap-4">
+                        <?php if ( $detail_image_1 ) : ?>
                         <div class="bg-stone-100 aspect-square overflow-hidden">
                             <img src="<?php echo esc_url( $detail_image_1 ); ?>" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" alt="Detail 1">
                         </div>
+                        <?php endif; ?>
+                        <?php if ( $detail_image_2 ) : ?>
                         <div class="bg-stone-100 aspect-square overflow-hidden">
                             <img src="<?php echo esc_url( $detail_image_2 ); ?>" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" alt="Detail 2">
                         </div>
+                        <?php endif; ?>
+                        <?php if ( $detail_image_3 ) : ?>
+                        <div class="bg-stone-100 aspect-square overflow-hidden">
+                            <img src="<?php echo esc_url( $detail_image_3 ); ?>" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" alt="Detail 3">
+                        </div>
+                        <?php endif; ?>
                     </div>
+                    <?php endif; ?>
                 </div>
 
                 <!-- Right: Info -->
