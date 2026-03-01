@@ -1506,6 +1506,14 @@ function dedwards_render_work_hero( $attributes, $content, $block ) {
     $is_in_progress  = has_term( 'in-progress', 'work_category', $post_id );
     $is_transitional   = has_term( 'transitional-art', 'work_category', $post_id );
     
+    // Build ordered gallery: featured first, then detail images
+    $gallery_images = array();
+    $gallery_images[] = array( 'url' => $featured_image, 'alt' => $title );
+    if ( $detail_image_1 ) $gallery_images[] = array( 'url' => $detail_image_1, 'alt' => $title . ' — Detail' );
+    if ( $detail_image_2 ) $gallery_images[] = array( 'url' => $detail_image_2, 'alt' => $title . ' — Detail' );
+    if ( $detail_image_3 ) $gallery_images[] = array( 'url' => $detail_image_3, 'alt' => $title . ' — Detail' );
+    $has_multiple = count( $gallery_images ) > 1;
+
     ob_start();
     ?>
     <div class="bg-white">
@@ -1518,30 +1526,44 @@ function dedwards_render_work_hero( $attributes, $content, $block ) {
             </div>
 
             <div class="max-w-[1600px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 px-6 md:px-12">
-                <!-- Left: Images -->
-                <div class="lg:col-span-5 space-y-4">
-                    <div class="bg-stone-100 aspect-[4/5] overflow-hidden relative">
-                        <img src="<?php echo esc_url( $featured_image ); ?>" class="w-full h-full object-cover" alt="<?php echo esc_attr( $title ); ?>">
+                <!-- Left: Image Gallery -->
+                <div class="lg:col-span-5">
+                    <div class="work-gallery" id="work-gallery-<?php echo esc_attr( $post_id ); ?>">
+
+                        <!-- Main slide area -->
+                        <div class="relative bg-stone-100 aspect-[4/5] overflow-hidden mb-4">
+                            <?php foreach ( $gallery_images as $idx => $img ) : ?>
+                            <div class="work-gallery__slide absolute inset-0 transition-opacity duration-500 <?php echo $idx === 0 ? 'opacity-100' : 'opacity-0 pointer-events-none'; ?>" data-index="<?php echo $idx; ?>">
+                                <img src="<?php echo esc_url( $img['url'] ); ?>" alt="<?php echo esc_attr( $img['alt'] ); ?>" class="w-full h-full object-cover">
+                            </div>
+                            <?php endforeach; ?>
+
+                            <?php if ( $has_multiple ) : ?>
+                            <button class="work-gallery__prev absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/80 hover:bg-white flex items-center justify-center transition-colors shadow-md z-10" aria-label="Previous image">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15,18 9,12 15,6"/></svg>
+                            </button>
+                            <button class="work-gallery__next absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/80 hover:bg-white flex items-center justify-center transition-colors shadow-md z-10" aria-label="Next image">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9,18 15,12 9,6"/></svg>
+                            </button>
+                            <?php endif; ?>
+                        </div>
+
+                        <?php if ( $has_multiple ) : ?>
+                        <!-- Thumbnails — desktop only -->
+                        <div class="hidden lg:flex gap-3">
+                            <?php foreach ( $gallery_images as $idx => $img ) : ?>
+                            <button
+                                class="work-gallery__thumb flex-1 aspect-square overflow-hidden bg-stone-100 border-2 transition-all duration-200 <?php echo $idx === 0 ? 'border-stone-900' : 'border-transparent hover:border-stone-400'; ?>"
+                                data-index="<?php echo $idx; ?>"
+                                aria-label="View image <?php echo $idx + 1; ?>"
+                            >
+                                <img src="<?php echo esc_url( $img['url'] ); ?>" alt="" class="w-full h-full object-cover">
+                            </button>
+                            <?php endforeach; ?>
+                        </div>
+                        <?php endif; ?>
+
                     </div>
-                    <?php if ( $detail_image_1 || $detail_image_2 || $detail_image_3 ) : ?>
-                    <div class="grid grid-cols-3 gap-4">
-                        <?php if ( $detail_image_1 ) : ?>
-                        <div class="bg-stone-100 aspect-square overflow-hidden">
-                            <img src="<?php echo esc_url( $detail_image_1 ); ?>" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" alt="Detail 1">
-                        </div>
-                        <?php endif; ?>
-                        <?php if ( $detail_image_2 ) : ?>
-                        <div class="bg-stone-100 aspect-square overflow-hidden">
-                            <img src="<?php echo esc_url( $detail_image_2 ); ?>" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" alt="Detail 2">
-                        </div>
-                        <?php endif; ?>
-                        <?php if ( $detail_image_3 ) : ?>
-                        <div class="bg-stone-100 aspect-square overflow-hidden">
-                            <img src="<?php echo esc_url( $detail_image_3 ); ?>" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" alt="Detail 3">
-                        </div>
-                        <?php endif; ?>
-                    </div>
-                    <?php endif; ?>
                 </div>
 
                 <!-- Right: Info -->
@@ -1600,6 +1622,37 @@ function dedwards_render_work_hero( $attributes, $content, $block ) {
             </div>
         </div>
     </div>
+
+    <?php if ( $has_multiple ) : ?>
+    <script>
+    (function(){
+        document.querySelectorAll('.work-gallery').forEach(function(gallery){
+            var slides = Array.from(gallery.querySelectorAll('.work-gallery__slide'));
+            var thumbs = Array.from(gallery.querySelectorAll('.work-gallery__thumb'));
+            var prev   = gallery.querySelector('.work-gallery__prev');
+            var next   = gallery.querySelector('.work-gallery__next');
+            var cur    = 0;
+
+            function goTo(i){
+                slides[cur].classList.remove('opacity-100');
+                slides[cur].classList.add('opacity-0','pointer-events-none');
+                if(thumbs[cur]){ thumbs[cur].classList.remove('border-stone-900'); thumbs[cur].classList.add('border-transparent'); }
+
+                cur = (i + slides.length) % slides.length;
+
+                slides[cur].classList.add('opacity-100');
+                slides[cur].classList.remove('opacity-0','pointer-events-none');
+                if(thumbs[cur]){ thumbs[cur].classList.add('border-stone-900'); thumbs[cur].classList.remove('border-transparent'); }
+            }
+
+            thumbs.forEach(function(t){ t.addEventListener('click', function(){ goTo(parseInt(this.dataset.index)); }); });
+            if(prev) prev.addEventListener('click', function(){ goTo(cur - 1); });
+            if(next) next.addEventListener('click', function(){ goTo(cur + 1); });
+        });
+    })();
+    </script>
+    <?php endif; ?>
+
     <?php
     return ob_get_clean();
 }
