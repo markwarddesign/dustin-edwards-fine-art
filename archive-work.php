@@ -10,19 +10,35 @@ get_header();
 // Get current page for pagination
 $paged = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
 
+// Active category filter from URL param
+$active_cat = isset( $_GET['work_cat'] ) ? sanitize_title( $_GET['work_cat'] ) : '';
+
+// Build tax_query — always exclude in-progress; optionally filter by selected category
+$tax_query = array(
+    'relation' => 'AND',
+    array(
+        'taxonomy' => 'work_category',
+        'field'    => 'slug',
+        'terms'    => 'in-progress',
+        'operator' => 'NOT IN',
+    ),
+);
+
+if ( $active_cat ) {
+    $tax_query[] = array(
+        'taxonomy' => 'work_category',
+        'field'    => 'slug',
+        'terms'    => $active_cat,
+        'operator' => 'IN',
+    );
+}
+
 $args = array(
     'post_type'      => 'work',
     'posts_per_page' => 9,
     'paged'          => $paged,
     'post_status'    => 'publish',
-    'tax_query'      => array(
-        array(
-            'taxonomy' => 'work_category',
-            'field'    => 'slug',
-            'terms'    => 'in-progress',
-            'operator' => 'NOT IN',
-        ),
-    ),
+    'tax_query'      => $tax_query,
 );
 
 $works = new WP_Query( $args );
@@ -45,9 +61,37 @@ $in_progress = new WP_Query( array(
     <div class="pt-32 md:pt-48 px-6 md:px-12 pb-12 bg-stone-50 min-h-screen">
         <div class="max-w-7xl mx-auto">
             <h1 class="font-display text-4xl md:text-5xl text-stone-850 mb-4">The Collection</h1>
-            <p class="font-serif italic text-stone-500 mb-16 max-w-2xl">
+            <p class="font-serif italic text-stone-500 mb-12 max-w-2xl">
                 A curated selection of bronze works exploring the untamed spirit of the American West and the human form.
             </p>
+
+            <?php
+            // Build filter pills — all public work_category terms except in-progress
+            $filter_terms = get_terms( array(
+                'taxonomy'   => 'work_category',
+                'hide_empty' => true,
+                'exclude'    => array( get_term_by( 'slug', 'in-progress', 'work_category' )->term_id ?? 0 ),
+            ) );
+            if ( ! empty( $filter_terms ) && ! is_wp_error( $filter_terms ) ) :
+                $archive_url = get_post_type_archive_link( 'work' );
+            ?>
+            <div class="flex flex-wrap gap-3 mb-16" role="navigation" aria-label="Filter by category">
+                <a
+                    href="<?php echo esc_url( $archive_url ); ?>"
+                    class="<?php echo ! $active_cat ? 'bg-stone-900 text-white' : 'bg-transparent text-stone-600 border border-stone-300 hover:border-stone-900 hover:text-stone-900'; ?> text-[10px] uppercase tracking-[0.2em] px-5 py-2.5 transition-all duration-200"
+                >
+                    All
+                </a>
+                <?php foreach ( $filter_terms as $term ) : ?>
+                <a
+                    href="<?php echo esc_url( add_query_arg( 'work_cat', $term->slug, $archive_url ) ); ?>"
+                    class="<?php echo ( $active_cat === $term->slug ) ? 'bg-stone-900 text-white' : 'bg-transparent text-stone-600 border border-stone-300 hover:border-stone-900 hover:text-stone-900'; ?> text-[10px] uppercase tracking-[0.2em] px-5 py-2.5 transition-all duration-200"
+                >
+                    <?php echo esc_html( $term->name ); ?>
+                </a>
+                <?php endforeach; ?>
+            </div>
+            <?php endif; ?>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-24 gap-x-12">
                 <?php if ( $works->have_posts() ) : ?>
