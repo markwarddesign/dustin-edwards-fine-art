@@ -1,0 +1,32 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "dedwards/page-title",
+  "version": "1.0.0",
+  "title": "Page Title",
+  "category": "custom",
+  "icon": "heading",
+  "description": "Generic page title with optional subtitle",
+  "supports": {
+    "html": false,
+    "align": ["full"]
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "default": "Page Title"
+    },
+    "subtitle": {
+      "type": "string",
+      "default": ""
+    },
+    "alignment": {
+      "type": "string",
+      "default": "left"
+    },
+    "theme": {
+      "type": "string",
+      "default": "light"
+    }
+  }
+}

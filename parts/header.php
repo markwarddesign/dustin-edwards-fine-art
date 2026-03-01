@@ -46,7 +46,7 @@
                 'container' => false,
                 'menu_class' => '',
                 'items_wrap' => '<ul class="flex flex-col gap-8 list-none m-0 p-0">%3$s</ul>',
-                'link_before' => '<span class="text-bronze-300 hover:text-white text-5xl font-display font-semibold uppercase tracking-[0.2em] transition-colors">',
+                'link_before' => '<span class="text-bronze-300 hover:text-white text-2xl font-display font-semibold uppercase tracking-[0.2em] transition-colors">',
                 'link_after' => '</span>',
             ) );
         } else {

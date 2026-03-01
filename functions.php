@@ -92,11 +92,11 @@ function dedwards_fallback_menu() {
  * Mobile fallback menu function
  */
 function dedwards_mobile_fallback_menu() {
-    echo '<a href="' . esc_url( home_url( '/' ) ) . '" class="text-bronze-300 hover:text-white text-5xl font-display font-semibold uppercase tracking-[0.2em] transition-colors">Home</a>';
-    echo '<a href="' . esc_url( home_url( '/collection' ) ) . '" class="text-bronze-300 hover:text-white text-5xl font-display font-semibold uppercase tracking-[0.2em] transition-colors">Collection</a>';
-    echo '<a href="' . esc_url( home_url( '/the-artist' ) ) . '" class="text-bronze-300 hover:text-white text-5xl font-display font-semibold uppercase tracking-[0.2em] transition-colors">The Artist</a>';
-    echo '<a href="' . esc_url( home_url( '/philosophy' ) ) . '" class="text-bronze-300 hover:text-white text-5xl font-display font-semibold uppercase tracking-[0.2em] transition-colors">Philosophy</a>';
-    echo '<a href="' . esc_url( home_url( '/inquire' ) ) . '" class="text-bronze-300 hover:text-white text-5xl font-display font-semibold uppercase tracking-[0.2em] transition-colors">Inquire</a>';
+    echo '<a href="' . esc_url( home_url( '/' ) ) . '" class="text-bronze-300 hover:text-white text-2xl font-display font-semibold uppercase tracking-[0.2em] transition-colors">Home</a>';
+    echo '<a href="' . esc_url( home_url( '/collection' ) ) . '" class="text-bronze-300 hover:text-white text-2xl font-display font-semibold uppercase tracking-[0.2em] transition-colors">Collection</a>';
+    echo '<a href="' . esc_url( home_url( '/the-artist' ) ) . '" class="text-bronze-300 hover:text-white text-2xl font-display font-semibold uppercase tracking-[0.2em] transition-colors">The Artist</a>';
+    echo '<a href="' . esc_url( home_url( '/philosophy' ) ) . '" class="text-bronze-300 hover:text-white text-2xl font-display font-semibold uppercase tracking-[0.2em] transition-colors">Philosophy</a>';
+    echo '<a href="' . esc_url( home_url( '/inquire' ) ) . '" class="text-bronze-300 hover:text-white text-2xl font-display font-semibold uppercase tracking-[0.2em] transition-colors">Inquire</a>';
 }
 
 /**
@@ -1136,8 +1136,56 @@ function dedwards_register_blocks() {
         'render_callback' => 'dedwards_render_adaptive_gallery',
         'editor_script' => 'dedwards-adaptive-gallery-editor',
     ) );
+
+    // Register page title block with render callback
+    wp_register_script(
+        'dedwards-page-title-editor',
+        get_template_directory_uri() . '/build/page-title/index.js',
+        array( 'wp-blocks', 'wp-element', 'wp-editor', 'wp-components', 'wp-i18n', 'wp-block-editor' ),
+        filemtime( get_template_directory() . '/build/page-title/index.js' )
+    );
+
+    register_block_type( get_template_directory() . '/blocks/page-title', array(
+        'render_callback' => 'dedwards_render_page_title',
+        'editor_script'   => 'dedwards-page-title-editor',
+    ) );
 }
 add_action( 'init', 'dedwards_register_blocks' );
+
+/**
+ * Render callback for page title block
+ */
+function dedwards_render_page_title( $attributes ) {
+    $title     = $attributes['title'] ?? '';
+    $subtitle  = $attributes['subtitle'] ?? '';
+    $alignment = $attributes['alignment'] ?? 'left';
+    $theme     = $attributes['theme'] ?? 'light';
+
+    $is_dark      = $theme === 'dark';
+    $bg_class     = $is_dark ? 'bg-stone-900' : 'bg-stone-50';
+    $title_color  = $is_dark ? 'text-white' : 'text-stone-900';
+    $sub_color    = $is_dark ? 'text-stone-400' : 'text-stone-500';
+    $align_class  = $alignment === 'center' ? 'text-center items-center' : 'text-left items-start';
+
+    ob_start();
+    ?>
+    <div class="<?php echo esc_attr( $bg_class ); ?> pt-32 md:pt-48 pb-16 px-6 md:px-12">
+        <div class="max-w-7xl mx-auto flex flex-col <?php echo esc_attr( $align_class ); ?>">
+            <?php if ( $title ) : ?>
+                <h1 class="font-display text-4xl md:text-5xl <?php echo esc_attr( $title_color ); ?> mb-4">
+                    <?php echo wp_kses_post( $title ); ?>
+                </h1>
+            <?php endif; ?>
+            <?php if ( $subtitle ) : ?>
+                <p class="font-serif italic <?php echo esc_attr( $sub_color ); ?> max-w-2xl text-lg">
+                    <?php echo wp_kses_post( $subtitle ); ?>
+                </p>
+            <?php endif; ?>
+        </div>
+    </div>
+    <?php
+    return ob_get_clean();
+}
 
 /**
  * Render callback for contact section to process Contact Form 7 shortcodes
@@ -1188,59 +1236,77 @@ function dedwards_render_collection_section( $attributes ) {
         $paged = 1;
     }
     
+    // Main query — on archive, exclude in-progress pieces
     $args = array(
-        'post_type' => 'work',
+        'post_type'      => 'work',
         'posts_per_page' => $posts_per_page,
-        'post_status' => 'publish',
-        'paged' => $paged,
+        'post_status'    => 'publish',
+        'paged'          => $paged,
     );
-    
-    if ( ! empty( $category ) ) {
+
+    if ( $is_archive ) {
         $args['tax_query'] = array(
             array(
                 'taxonomy' => 'work_category',
-                'field' => 'term_id',
-                'terms' => $category,
+                'field'    => 'slug',
+                'terms'    => 'in-progress',
+                'operator' => 'NOT IN',
+            ),
+        );
+    } elseif ( ! empty( $category ) ) {
+        $args['tax_query'] = array(
+            array(
+                'taxonomy' => 'work_category',
+                'field'    => 'term_id',
+                'terms'    => $category,
             ),
         );
     }
-    
+
     $works = new WP_Query( $args );
-    
+
+    // Separate in-progress query (archive only)
+    $in_progress = null;
+    if ( $is_archive ) {
+        $in_progress = new WP_Query( array(
+            'post_type'      => 'work',
+            'posts_per_page' => -1,
+            'post_status'    => 'publish',
+            'tax_query'      => array(
+                array(
+                    'taxonomy' => 'work_category',
+                    'field'    => 'slug',
+                    'terms'    => 'in-progress',
+                ),
+            ),
+        ) );
+    }
+
     ob_start();
     ?>
     <div class="pt-32 md:pt-48 px-6 md:px-12 pb-12 bg-stone-50 min-h-screen">
         <div class="max-w-7xl mx-auto">
             <h1 class="font-display text-4xl md:text-5xl text-stone-850 mb-4"><?php echo esc_html( $heading ); ?></h1>
             <p class="font-serif italic text-stone-500 mb-16 max-w-2xl"><?php echo esc_html( $subheading ); ?></p>
-            
+
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-24 gap-x-12">
                 <?php if ( $works->have_posts() ) : ?>
                     <?php while ( $works->have_posts() ) : $works->the_post(); ?>
                         <?php
-                        $material = get_post_meta( get_the_ID(), '_work_material', true );
-                        $material = $material ?: 'Bronze';
-                        
+                        $material = get_post_meta( get_the_ID(), '_work_material', true ) ?: 'Bronze';
                         $featured_image = get_the_post_thumbnail_url( get_the_ID(), 'large' );
                         if ( ! $featured_image ) {
                             $featured_image = 'https://images.unsplash.com/photo-1628607153673-455b550117d9?q=80&w=1500&auto=format&fit=crop';
                         }
-                        
-                        $is_in_progress = has_term( 'in-progress', 'work_category', get_the_ID() );
                         ?>
                         <a href="<?php the_permalink(); ?>" class="group cursor-pointer block">
                             <div class="relative overflow-hidden aspect-[4/5] bg-stone-200 shadow-xl">
                                 <div class="absolute inset-0 bg-stone-900/10 group-hover:bg-transparent transition-colors z-10"></div>
-                                <img 
-                                    src="<?php echo esc_url( $featured_image ); ?>" 
-                                    class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" 
+                                <img
+                                    src="<?php echo esc_url( $featured_image ); ?>"
+                                    class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
                                     alt="<?php echo esc_attr( get_the_title() ); ?>"
                                 />
-                                <?php if ( $is_in_progress ) : ?>
-                                <div class="absolute top-3 left-3 z-20 bg-stone-900/80 backdrop-blur-sm text-bronze-300 text-[9px] uppercase tracking-[0.2em] px-3 py-1.5">
-                                    In Progress
-                                </div>
-                                <?php endif; ?>
                             </div>
                             <div class="mt-6 flex flex-col items-center text-center">
                                 <h3 class="font-serif text-2xl italic text-stone-800"><?php the_title(); ?></h3>
@@ -1253,7 +1319,7 @@ function dedwards_render_collection_section( $attributes ) {
                     <p class="col-span-full text-center text-stone-500">No works found.</p>
                 <?php endif; ?>
             </div>
-            
+
             <?php if ( ! $is_archive && $show_view_all && $works->found_posts > $posts_per_page ) : ?>
                 <!-- View All Button -->
                 <div class="mt-32 text-center">
@@ -1262,7 +1328,7 @@ function dedwards_render_collection_section( $attributes ) {
                     </a>
                 </div>
             <?php endif; ?>
-            
+
             <?php if ( $is_archive && $works->max_num_pages > 1 ) : ?>
                 <!-- Archive Pagination -->
                 <nav class="work-pagination mt-32 border-t border-stone-200 pt-12" aria-label="Works pagination">
@@ -1272,11 +1338,11 @@ function dedwards_render_collection_section( $attributes ) {
                                 ← Previous
                             </a>
                         <?php endif; ?>
-                        
+
                         <div class="flex items-center space-x-4">
-                            <?php 
+                            <?php
                             $total_pages = $works->max_num_pages;
-                            for ( $i = 1; $i <= $total_pages; $i++ ) : 
+                            for ( $i = 1; $i <= $total_pages; $i++ ) :
                             ?>
                                 <?php if ( $i == $paged ) : ?>
                                     <span class="w-8 h-8 bg-stone-900 text-white flex items-center justify-center text-sm font-medium">
@@ -1289,7 +1355,7 @@ function dedwards_render_collection_section( $attributes ) {
                                 <?php endif; ?>
                             <?php endfor; ?>
                         </div>
-                        
+
                         <?php if ( $paged < $total_pages ) : ?>
                             <a href="<?php echo esc_url( get_pagenum_link( $paged + 1 ) ); ?>" class="text-stone-400 hover:text-stone-800 transition-colors text-[10px] uppercase tracking-[0.2em]">
                                 Next →
@@ -1298,7 +1364,46 @@ function dedwards_render_collection_section( $attributes ) {
                     </div>
                 </nav>
             <?php endif; ?>
-            
+
+            <?php if ( $is_archive && $in_progress && $in_progress->have_posts() ) : ?>
+                <!-- Works in Progress Section -->
+                <div class="mt-32 pt-20 border-t border-stone-200">
+                    <div class="mb-16">
+                        <h2 class="font-display text-3xl md:text-4xl text-stone-800 mb-3">Works in Progress</h2>
+                        <p class="font-serif italic text-stone-400 max-w-xl">These pieces are currently being sculpted — a glimpse into the studio.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-24 gap-x-12">
+                        <?php while ( $in_progress->have_posts() ) : $in_progress->the_post(); ?>
+                            <?php
+                            $material = get_post_meta( get_the_ID(), '_work_material', true ) ?: 'Bronze';
+                            $featured_image = get_the_post_thumbnail_url( get_the_ID(), 'large' );
+                            if ( ! $featured_image ) {
+                                $featured_image = 'https://images.unsplash.com/photo-1628607153673-455b550117d9?q=80&w=1500&auto=format&fit=crop';
+                            }
+                            ?>
+                            <a href="<?php the_permalink(); ?>" class="group cursor-pointer block">
+                                <div class="relative overflow-hidden aspect-[4/5] bg-stone-200 shadow-xl">
+                                    <div class="absolute inset-0 bg-stone-900/10 group-hover:bg-transparent transition-colors z-10"></div>
+                                    <img
+                                        src="<?php echo esc_url( $featured_image ); ?>"
+                                        class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                                        alt="<?php echo esc_attr( get_the_title() ); ?>"
+                                    />
+                                    <div class="absolute top-3 left-3 z-20 bg-stone-900/80 backdrop-blur-sm text-bronze-300 text-[9px] uppercase tracking-[0.2em] px-3 py-1.5">
+                                        In Progress
+                                    </div>
+                                </div>
+                                <div class="mt-6 flex flex-col items-center text-center">
+                                    <h3 class="font-serif text-2xl italic text-stone-800"><?php the_title(); ?></h3>
+                                    <p class="text-[10px] uppercase tracking-[0.2em] text-bronze-600 mt-2"><?php echo esc_html( $material ); ?></p>
+                                </div>
+                            </a>
+                        <?php endwhile; ?>
+                        <?php wp_reset_postdata(); ?>
+                    </div>
+                </div>
+            <?php endif; ?>
+
             <!-- CTA Section -->
             <div class="mt-48 pt-20 text-center max-w-3xl mx-auto border-t border-stone-200">
                 <h2 class="font-serif italic text-3xl md:text-4xl text-stone-900 mb-6">
