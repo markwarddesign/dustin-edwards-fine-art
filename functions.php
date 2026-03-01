@@ -151,6 +151,7 @@ function dedwards_allowed_block_types( $allowed_blocks, $editor_context ) {
         'dedwards/inquire-section',
         'dedwards/gallery-header',
         'dedwards/adaptive-gallery',
+        'dedwards/page-title',
         
         // Basic text blocks
         'core/paragraph',
