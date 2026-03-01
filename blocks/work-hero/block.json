@@ -12,12 +12,13 @@
   },
   "attributes": {
     "detailImage1": {
-      "type": "object",
-      "default": null
+      "type": "object"
     },
     "detailImage2": {
-      "type": "object",
-      "default": null
+      "type": "object"
+    },
+    "detailImage3": {
+      "type": "object"
     }
   },
   "usesContext": ["postId", "postType"],

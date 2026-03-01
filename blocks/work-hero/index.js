@@ -10,7 +10,7 @@ registerBlockType('dedwards/work-hero', {
             className: 'bg-white'
         });
 
-        const { detailImage1, detailImage2 } = attributes;
+        const { detailImage1, detailImage2, detailImage3 } = attributes;
         const postId = context.postId;
 
         const { editEntityRecord } = useDispatch('core');
@@ -137,6 +137,31 @@ registerBlockType('dedwards/work-hero', {
                                     />
                                 </MediaUploadCheck>
                             </div>
+                            <div>
+                                <p className="text-sm mb-2 font-medium">Detail Image 3</p>
+                                {detailImage3 && (
+                                    <img src={detailImage3.url} alt="" className="mb-2 max-w-full h-auto" style={{ maxHeight: '150px' }} />
+                                )}
+                                <MediaUploadCheck>
+                                    <MediaUpload
+                                        onSelect={(media) => setAttributes({ detailImage3: { id: media.id, url: media.url } })}
+                                        allowedTypes={['image']}
+                                        value={detailImage3?.id}
+                                        render={({ open }) => (
+                                            <div className="flex gap-2">
+                                                <Button variant="secondary" onClick={open}>
+                                                    {detailImage3 ? 'Change Image' : 'Add Image'}
+                                                </Button>
+                                                {detailImage3 && (
+                                                    <Button variant="tertiary" isDestructive onClick={() => setAttributes({ detailImage3: null })}>
+                                                        Remove
+                                                    </Button>
+                                                )}
+                                            </div>
+                                        )}
+                                    />
+                                </MediaUploadCheck>
+                            </div>
                         </div>
                     </PanelBody>
                 </InspectorControls>
@@ -187,7 +212,7 @@ registerBlockType('dedwards/work-hero', {
                                         />
                                     </MediaUploadCheck>
                                 </div>
-                                <div className="grid grid-cols-2 gap-4">
+                                <div className="grid grid-cols-3 gap-4">
                                     <div className="bg-stone-200 aspect-square overflow-hidden relative border-2 border-dashed border-transparent hover:border-blue-400 transition-all group">
                                         <MediaUploadCheck>
                                             <MediaUpload
@@ -246,6 +271,46 @@ registerBlockType('dedwards/work-hero', {
                                                                     src={detailImage2.url} 
                                                                     className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" 
                                                                     alt="Detail 2" 
+                                                                />
+                                                                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all flex items-center justify-center">
+                                                                    <span className="opacity-0 group-hover:opacity-100 text-white text-xs font-medium bg-black/50 px-3 py-1 rounded transition-opacity">
+                                                                        Change Image
+                                                                    </span>
+                                                                </div>
+                                                            </>
+                                                        ) : (
+                                                            <div className="w-full h-full flex flex-col items-center justify-center">
+                                                                <div className="bg-white hover:bg-stone-50 border-2 border-stone-300 hover:border-blue-400 rounded-lg px-6 py-4 transition-all">
+                                                                    <svg className="w-8 h-8 mb-2 text-stone-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4v16m8-8H4" />
+                                                                    </svg>
+                                                                    <span className="text-xs font-medium text-stone-700">Add Detail Image</span>
+                                                                </div>
+                                                            </div>
+                                                        )}
+                                                    </button>
+                                                )}
+                                            />
+                                        </MediaUploadCheck>
+                                    </div>
+                                    <div className="bg-stone-200 aspect-square overflow-hidden relative border-2 border-dashed border-transparent hover:border-blue-400 transition-all group">
+                                        <MediaUploadCheck>
+                                            <MediaUpload
+                                                onSelect={(media) => setAttributes({ detailImage3: { id: media.id, url: media.url } })}
+                                                allowedTypes={['image']}
+                                                value={detailImage3?.id}
+                                                render={({ open }) => (
+                                                    <button 
+                                                        onClick={open}
+                                                        className="w-full h-full relative"
+                                                        title="Click to change detail image"
+                                                    >
+                                                        {detailImage3 ? (
+                                                            <>
+                                                                <img 
+                                                                    src={detailImage3.url} 
+                                                                    className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" 
+                                                                    alt="Detail 3" 
                                                                 />
                                                                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all flex items-center justify-center">
                                                                     <span className="opacity-0 group-hover:opacity-100 text-white text-xs font-medium bg-black/50 px-3 py-1 rounded transition-opacity">
