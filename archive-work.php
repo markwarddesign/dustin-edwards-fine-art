@@ -39,6 +39,8 @@ $works = new WP_Query( $args );
                         if ( ! $featured_image ) {
                             $featured_image = 'https://images.unsplash.com/photo-1628607153673-455b550117d9?q=80&w=1500&auto=format&fit=crop';
                         }
+                        
+                        $is_in_progress = has_term( 'in-progress', 'work_category', get_the_ID() );
                         ?>
                         <a href="<?php the_permalink(); ?>" class="group cursor-pointer block">
                             <div class="relative overflow-hidden aspect-[4/5] bg-stone-200 shadow-xl">
@@ -48,6 +50,11 @@ $works = new WP_Query( $args );
                                     class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" 
                                     alt="<?php echo esc_attr( get_the_title() ); ?>"
                                 />
+                                <?php if ( $is_in_progress ) : ?>
+                                <div class="absolute top-3 left-3 z-20 bg-stone-900/80 backdrop-blur-sm text-bronze-300 text-[9px] uppercase tracking-[0.2em] px-3 py-1.5">
+                                    In Progress
+                                </div>
+                                <?php endif; ?>
                             </div>
                             <div class="mt-6 flex flex-col items-center text-center">
                                 <h3 class="font-serif text-2xl italic text-stone-800"><?php the_title(); ?></h3>
