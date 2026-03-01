@@ -938,30 +938,48 @@ function dedwards_register_work_meta_rest() {
         'type' => 'string',
     ) );
 
-    // Detail images stored as JSON strings {"id":123,"url":"https://..."}
-    register_post_meta( 'work', '_work_detail_image_1', array(
-        'show_in_rest' => true,
-        'single'       => true,
-        'type'         => 'string',
-        'default'      => '',
-        'auth_callback' => function() { return current_user_can( 'edit_posts' ); },
-    ) );
-    register_post_meta( 'work', '_work_detail_image_2', array(
-        'show_in_rest' => true,
-        'single'       => true,
-        'type'         => 'string',
-        'default'      => '',
-        'auth_callback' => function() { return current_user_can( 'edit_posts' ); },
-    ) );
-    register_post_meta( 'work', '_work_detail_image_3', array(
-        'show_in_rest' => true,
-        'single'       => true,
-        'type'         => 'string',
-        'default'      => '',
-        'auth_callback' => function() { return current_user_can( 'edit_posts' ); },
-    ) );
 }
 add_action( 'init', 'dedwards_register_work_meta_rest' );
+
+/**
+ * Pre-populate new work posts with the work-hero block so detail image
+ * attributes are stored per-post in post content (not shared in template).
+ */
+add_filter( 'default_content', function( $content, $post ) {
+    if ( $post->post_type === 'work' ) {
+        return '<!-- wp:dedwards/work-hero /-->';
+    }
+    return $content;
+}, 10, 2 );
+
+/**
+ * Fallback: if a work post has empty content (e.g. existing posts created
+ * before this architecture change), render the work-hero block automatically.
+ */
+add_filter( 'render_block', function( $block_content, $block ) {
+    if ( $block['blockName'] !== 'core/post-content' ) {
+        return $block_content;
+    }
+    if ( ! is_singular( 'work' ) ) {
+        return $block_content;
+    }
+    if ( ! empty( trim( strip_tags( $block_content ) ) ) ) {
+        return $block_content;
+    }
+    // Content is empty — render a default work-hero for this post
+    $post_id  = get_the_ID();
+    $block_obj = new WP_Block(
+        array(
+            'blockName'    => 'dedwards/work-hero',
+            'attrs'        => array(),
+            'innerBlocks'  => array(),
+            'innerHTML'    => '',
+            'innerContent' => array(),
+        ),
+        array( 'postId' => $post_id, 'postType' => 'work' )
+    );
+    return dedwards_render_work_hero( array(), '', $block_obj );
+}, 10, 2 );
 
 /**
  * Register Custom Blocks
@@ -1480,18 +1498,10 @@ function dedwards_render_work_hero( $attributes, $content, $block ) {
         $featured_image = 'https://images.unsplash.com/photo-1628607153673-455b550117d9?q=80&w=1500&auto=format&fit=crop';
     }
     
-    // Detail images from post meta (stored as JSON {"id":123,"url":"https://..."})
-    $detail_1_raw   = get_post_meta( $post_id, '_work_detail_image_1', true );
-    $detail_1       = $detail_1_raw ? json_decode( $detail_1_raw, true ) : null;
-    $detail_image_1 = $detail_1['url'] ?? null;
-
-    $detail_2_raw   = get_post_meta( $post_id, '_work_detail_image_2', true );
-    $detail_2       = $detail_2_raw ? json_decode( $detail_2_raw, true ) : null;
-    $detail_image_2 = $detail_2['url'] ?? null;
-
-    $detail_3_raw   = get_post_meta( $post_id, '_work_detail_image_3', true );
-    $detail_3       = $detail_3_raw ? json_decode( $detail_3_raw, true ) : null;
-    $detail_image_3 = $detail_3['url'] ?? null;
+    // Detail images from block attributes (stored per-post in post content)
+    $detail_image_1 = $attributes['detailImage1']['url'] ?? null;
+    $detail_image_2 = $attributes['detailImage2']['url'] ?? null;
+    $detail_image_3 = $attributes['detailImage3']['url'] ?? null;
     
     $is_in_progress  = has_term( 'in-progress', 'work_category', $post_id );
     $is_transitional   = has_term( 'transitional-art', 'work_category', $post_id );

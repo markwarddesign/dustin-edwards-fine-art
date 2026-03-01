@@ -10,7 +10,17 @@
   "supports": {
     "html": false
   },
-  "attributes": {},
+  "attributes": {
+    "detailImage1": {
+      "type": "object"
+    },
+    "detailImage2": {
+      "type": "object"
+    },
+    "detailImage3": {
+      "type": "object"
+    }
+  },
   "usesContext": ["postId", "postType"],
   "textdomain": "dedwards"
 }
