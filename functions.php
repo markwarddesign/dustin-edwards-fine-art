@@ -78,6 +78,95 @@ function dedwards_theme_support() {
 add_action( 'after_setup_theme', 'dedwards_theme_support' );
 
 /**
+ * Custom navigation walker for styled menus
+ */
+class Dedwards_Nav_Walker extends Walker_Nav_Menu {
+    
+    // Start Level - wrap in <ul>
+    function start_lvl( &$output, $depth = 0, $args = null ) {
+        $indent = str_repeat( "\t", $depth );
+        $output .= "\n$indent<ul class=\"sub-menu\">\n";
+    }
+    
+    // End Level - close </ul>
+    function end_lvl( &$output, $depth = 0, $args = null ) {
+        $indent = str_repeat( "\t", $depth );
+        $output .= "$indent</ul>\n";
+    }
+    
+    // Start Element - each <li>
+    function start_el( &$output, $item, $depth = 0, $args = null, $id = 0 ) {
+        $indent = ( $depth ) ? str_repeat( "\t", $depth ) : '';
+        $class_names = $value = '';
+        $classes = empty( $item->classes ) ? array() : (array) $item->classes;
+        $classes[] = 'menu-item-' . $item->ID;
+        
+        // Check if it's mobile menu
+        $is_mobile = strpos( $args->menu_class ?? '', 'flex-col' ) !== false;
+        
+        $class_names = join( ' ', apply_filters( 'nav_menu_css_class', array_filter( $classes ), $item, $args ) );
+        $class_names = $class_names ? ' class="' . esc_attr( $class_names ) . '"' : '';
+        
+        $id = apply_filters( 'nav_menu_item_id', 'menu-item-'. $item->ID, $item, $args );
+        $id = $id ? ' id="' . esc_attr( $id ) . '"' : '';
+        
+        $indent = ( $depth ) ? str_repeat( "\t", $depth ) : '';
+        
+        $output .= $indent . '<li' . $id . $value . $class_names .'>';
+        
+        $attributes = ! empty( $item->attr_title ) ? ' title="'  . esc_attr( $item->attr_title ) .'"' : '';
+        $attributes .= ! empty( $item->target )     ? ' target="' . esc_attr( $item->target     ) .'"' : '';
+        $attributes .= ! empty( $item->xfn )        ? ' rel="'    . esc_attr( $item->xfn        ) .'"' : '';
+        $attributes .= ! empty( $item->url )        ? ' href="'   . esc_attr( $item->url        ) .'"' : '';
+        
+        $item_output = $args->before ?? '';
+        
+        if ( $is_mobile ) {
+            $item_output .= '<a' . $attributes . ' class="text-bronze-300 hover:text-white text-lg font-display font-semibold uppercase tracking-[0.2em] transition-colors">';
+        } else {
+            $item_output .= '<a' . $attributes . ' class="hover:text-bronze-300 transition-colors">';
+        }
+        
+        $item_output .= ( $args->link_before ?? '' ) . apply_filters( 'the_title', $item->title, $item->ID ) . ( $args->link_after ?? '' );
+        $item_output .= '</a>';
+        $item_output .= $args->after ?? '';
+        
+        $output .= apply_filters( 'walker_nav_menu_start_el', $item_output, $item, $depth, $args );
+    }
+    
+    // End Element - close </li>
+    function end_el( &$output, $item, $depth = 0, $args = null ) {
+        $output .= "</li>\n";
+    }
+}
+
+/**
+ * Fallback menu function
+ */
+function dedwards_fallback_menu() {
+    echo '<ul class="flex gap-12">';
+    echo '<li><a href="' . esc_url( home_url( '/' ) ) . '" class="hover:text-bronze-300 transition-colors">Home</a></li>';
+    echo '<li><a href="' . esc_url( home_url( '/collection' ) ) . '" class="hover:text-bronze-300 transition-colors">Collection</a></li>';
+    echo '<li><a href="' . esc_url( home_url( '/the-artist' ) ) . '" class="hover:text-bronze-300 transition-colors">The Artist</a></li>';
+    echo '<li><a href="' . esc_url( home_url( '/philosophy' ) ) . '" class="hover:text-bronze-300 transition-colors">Philosophy</a></li>';
+    echo '<li><a href="' . esc_url( home_url( '/inquire' ) ) . '" class="hover:text-bronze-300 transition-colors">Inquire</a></li>';
+    echo '</ul>';
+}
+
+/**
+ * Mobile fallback menu function
+ */
+function dedwards_mobile_fallback_menu() {
+    echo '<ul class="flex flex-col gap-6">';
+    echo '<li><a href="' . esc_url( home_url( '/' ) ) . '" class="text-bronze-300 hover:text-white text-lg font-display font-semibold uppercase tracking-[0.2em] transition-colors">Home</a></li>';
+    echo '<li><a href="' . esc_url( home_url( '/collection' ) ) . '" class="text-bronze-300 hover:text-white text-lg font-display font-semibold uppercase tracking-[0.2em] transition-colors">Collection</a></li>';
+    echo '<li><a href="' . esc_url( home_url( '/the-artist' ) ) . '" class="text-bronze-300 hover:text-white text-lg font-display font-semibold uppercase tracking-[0.2em] transition-colors">The Artist</a></li>';
+    echo '<li><a href="' . esc_url( home_url( '/philosophy' ) ) . '" class="text-bronze-300 hover:text-white text-lg font-display font-semibold uppercase tracking-[0.2em] transition-colors">Philosophy</a></li>';
+    echo '<li><a href="' . esc_url( home_url( '/inquire' ) ) . '" class="text-bronze-300 hover:text-white text-lg font-display font-semibold uppercase tracking-[0.2em] transition-colors">Inquire</a></li>';
+    echo '</ul>';
+}
+
+/**
  * Register custom block category
  */
 function dedwards_register_block_category( $categories ) {
@@ -1949,12 +2038,19 @@ function dedwards_render_adaptive_gallery( $attributes ) {
                     ?>
                     <div class="<?php echo esc_attr($container_class); ?> reveal" style="animation-delay: <?php echo esc_attr( $delay ); ?>s;">
                         <div class="<?php echo esc_attr($image_class); ?>">
-                            <div class="img-wrapper overflow-hidden bg-stone-100 shadow-lg">
+                            <div class="img-wrapper relative overflow-hidden bg-stone-100 shadow-lg cursor-pointer group" onclick="openFullscreen('<?php echo esc_url( $image['url'] ); ?>', '<?php echo esc_attr( $image['alt'] ?? '' ); ?>')">
                                 <img 
                                     src="<?php echo esc_url( $image['url'] ); ?>" 
                                     alt="<?php echo esc_attr( $image['alt'] ?? '' ); ?>"
-                                    class="w-full h-auto transition-transform duration-700 hover:scale-105"
+                                    class="w-full h-auto transition-transform duration-700 group-hover:scale-105"
                                 />
+                                <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-300 flex items-center justify-center">
+                                    <div class="bg-white bg-opacity-0 group-hover:bg-opacity-90 rounded-full p-0 group-hover:p-3 transition-all duration-300">
+                                        <svg class="w-0 h-0 group-hover:w-6 group-hover:h-6 text-stone-800 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path>
+                                        </svg>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         
@@ -1977,6 +2073,49 @@ function dedwards_render_adaptive_gallery( $attributes ) {
             </div>
         <?php endif; ?>
     </main>
+    
+    <!-- Fullscreen Image Modal -->
+    <div id="fullscreen-modal" class="fixed inset-0 bg-black bg-opacity-95 z-50 flex items-center justify-center hidden">
+        <div class="relative max-w-full max-h-full p-4">
+            <img id="fullscreen-image" src="" alt="" class="max-w-full max-h-full object-contain">
+            <button onclick="closeFullscreen()" class="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+    
+    <script>
+    function openFullscreen(imageSrc, imageAlt) {
+        const modal = document.getElementById('fullscreen-modal');
+        const image = document.getElementById('fullscreen-image');
+        image.src = imageSrc;
+        image.alt = imageAlt;
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+    
+    function closeFullscreen() {
+        const modal = document.getElementById('fullscreen-modal');
+        modal.classList.add('hidden');
+        document.body.style.overflow = '';
+    }
+    
+    // Close on escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeFullscreen();
+        }
+    });
+    
+    // Close on background click
+    document.getElementById('fullscreen-modal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeFullscreen();
+        }
+    });
+    </script>
     
     <!-- Add reveal animation CSS -->
     <style>
