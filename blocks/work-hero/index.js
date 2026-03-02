@@ -213,125 +213,89 @@ registerBlockType('dedwards/work-hero', {
                                     </MediaUploadCheck>
                                 </div>
                                 <div className="grid grid-cols-3 gap-4"> {/* detail images — saved to post meta */}
-                                    <div className="bg-stone-200 aspect-square overflow-hidden relative border-2 border-dashed border-transparent hover:border-blue-400 transition-all group">
+                                    <div className="bg-stone-200 aspect-square relative border-2 border-dashed border-transparent hover:border-blue-400 transition-all group">
                                         <MediaUploadCheck>
                                             <MediaUpload
                                                 onSelect={(media) => setAttributes({ detailImage1: { id: media.id, url: media.url } })}
                                                 allowedTypes={['image']}
                                                 value={detailImage1?.id}
                                                 render={({ open }) => (
-                                                    <button 
-                                                        onClick={open}
-                                                        className="w-full h-full relative"
-                                                        title="Click to change detail image"
-                                                    >
+                                                    <button onClick={open} className="w-full h-full overflow-hidden block absolute inset-0" title="Click to set detail image">
                                                         {detailImage1 ? (
-                                                            <>
-                                                                <img 
-                                                                    src={detailImage1.url} 
-                                                                    className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" 
-                                                                    alt="Detail 1" 
-                                                                />
-                                                                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all flex items-center justify-center">
-                                                                    <span className="opacity-0 group-hover:opacity-100 text-white text-xs font-medium bg-black/50 px-3 py-1 rounded transition-opacity">
-                                                                        Change Image
-                                                                    </span>
-                                                                </div>
-                                                            </>
+                                                            <img src={detailImage1.url} className="w-full h-full object-cover" alt="Detail 1" />
                                                         ) : (
                                                             <div className="w-full h-full flex flex-col items-center justify-center">
-                                                                <div className="bg-white hover:bg-stone-50 border-2 border-stone-300 hover:border-blue-400 rounded-lg px-6 py-4 transition-all">
-                                                                    <svg className="w-8 h-8 mb-2 text-stone-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4v16m8-8H4" />
-                                                                    </svg>
-                                                                    <span className="text-xs font-medium text-stone-700">Add Detail Image</span>
-                                                                </div>
+                                                                <svg className="w-8 h-8 mb-1 text-stone-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4v16m8-8H4" /></svg>
+                                                                <span className="text-xs text-stone-600">Add Image</span>
                                                             </div>
                                                         )}
                                                     </button>
                                                 )}
                                             />
                                         </MediaUploadCheck>
+                                        {detailImage1 && (
+                                            <button
+                                                onClick={(e) => { e.stopPropagation(); setAttributes({ detailImage1: undefined }); }}
+                                                style={{ position:'absolute', top:'4px', right:'4px', zIndex:30, width:'22px', height:'22px', background:'rgba(220,38,38,0.9)', border:'none', borderRadius:'50%', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', color:'white', fontSize:'12px', lineHeight:1 }}
+                                                title="Remove image"
+                                            >✕</button>
+                                        )}
                                     </div>
-                                    <div className="bg-stone-200 aspect-square overflow-hidden relative border-2 border-dashed border-transparent hover:border-blue-400 transition-all group">
+                                    <div className="bg-stone-200 aspect-square relative border-2 border-dashed border-transparent hover:border-blue-400 transition-all group">
                                         <MediaUploadCheck>
                                             <MediaUpload
                                                 onSelect={(media) => setAttributes({ detailImage2: { id: media.id, url: media.url } })}
                                                 allowedTypes={['image']}
                                                 value={detailImage2?.id}
                                                 render={({ open }) => (
-                                                    <button 
-                                                        onClick={open}
-                                                        className="w-full h-full relative"
-                                                        title="Click to change detail image"
-                                                    >
+                                                    <button onClick={open} className="w-full h-full overflow-hidden block absolute inset-0" title="Click to set detail image">
                                                         {detailImage2 ? (
-                                                            <>
-                                                                <img 
-                                                                    src={detailImage2.url} 
-                                                                    className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" 
-                                                                    alt="Detail 2" 
-                                                                />
-                                                                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all flex items-center justify-center">
-                                                                    <span className="opacity-0 group-hover:opacity-100 text-white text-xs font-medium bg-black/50 px-3 py-1 rounded transition-opacity">
-                                                                        Change Image
-                                                                    </span>
-                                                                </div>
-                                                            </>
+                                                            <img src={detailImage2.url} className="w-full h-full object-cover" alt="Detail 2" />
                                                         ) : (
                                                             <div className="w-full h-full flex flex-col items-center justify-center">
-                                                                <div className="bg-white hover:bg-stone-50 border-2 border-stone-300 hover:border-blue-400 rounded-lg px-6 py-4 transition-all">
-                                                                    <svg className="w-8 h-8 mb-2 text-stone-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4v16m8-8H4" />
-                                                                    </svg>
-                                                                    <span className="text-xs font-medium text-stone-700">Add Detail Image</span>
-                                                                </div>
+                                                                <svg className="w-8 h-8 mb-1 text-stone-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4v16m8-8H4" /></svg>
+                                                                <span className="text-xs text-stone-600">Add Image</span>
                                                             </div>
                                                         )}
                                                     </button>
                                                 )}
                                             />
                                         </MediaUploadCheck>
+                                        {detailImage2 && (
+                                            <button
+                                                onClick={(e) => { e.stopPropagation(); setAttributes({ detailImage2: undefined }); }}
+                                                style={{ position:'absolute', top:'4px', right:'4px', zIndex:30, width:'22px', height:'22px', background:'rgba(220,38,38,0.9)', border:'none', borderRadius:'50%', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', color:'white', fontSize:'12px', lineHeight:1 }}
+                                                title="Remove image"
+                                            >✕</button>
+                                        )}
                                     </div>
-                                    <div className="bg-stone-200 aspect-square overflow-hidden relative border-2 border-dashed border-transparent hover:border-blue-400 transition-all group">
+                                    <div className="bg-stone-200 aspect-square relative border-2 border-dashed border-transparent hover:border-blue-400 transition-all group">
                                         <MediaUploadCheck>
                                             <MediaUpload
                                                 onSelect={(media) => setAttributes({ detailImage3: { id: media.id, url: media.url } })}
                                                 allowedTypes={['image']}
                                                 value={detailImage3?.id}
                                                 render={({ open }) => (
-                                                    <button 
-                                                        onClick={open}
-                                                        className="w-full h-full relative"
-                                                        title="Click to change detail image"
-                                                    >
+                                                    <button onClick={open} className="w-full h-full overflow-hidden block absolute inset-0" title="Click to set detail image">
                                                         {detailImage3 ? (
-                                                            <>
-                                                                <img 
-                                                                    src={detailImage3.url} 
-                                                                    className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" 
-                                                                    alt="Detail 3" 
-                                                                />
-                                                                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all flex items-center justify-center">
-                                                                    <span className="opacity-0 group-hover:opacity-100 text-white text-xs font-medium bg-black/50 px-3 py-1 rounded transition-opacity">
-                                                                        Change Image
-                                                                    </span>
-                                                                </div>
-                                                            </>
+                                                            <img src={detailImage3.url} className="w-full h-full object-cover" alt="Detail 3" />
                                                         ) : (
                                                             <div className="w-full h-full flex flex-col items-center justify-center">
-                                                                <div className="bg-white hover:bg-stone-50 border-2 border-stone-300 hover:border-blue-400 rounded-lg px-6 py-4 transition-all">
-                                                                    <svg className="w-8 h-8 mb-2 text-stone-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4v16m8-8H4" />
-                                                                    </svg>
-                                                                    <span className="text-xs font-medium text-stone-700">Add Detail Image</span>
-                                                                </div>
+                                                                <svg className="w-8 h-8 mb-1 text-stone-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4v16m8-8H4" /></svg>
+                                                                <span className="text-xs text-stone-600">Add Image</span>
                                                             </div>
                                                         )}
                                                     </button>
                                                 )}
                                             />
                                         </MediaUploadCheck>
+                                        {detailImage3 && (
+                                            <button
+                                                onClick={(e) => { e.stopPropagation(); setAttributes({ detailImage3: undefined }); }}
+                                                style={{ position:'absolute', top:'4px', right:'4px', zIndex:30, width:'22px', height:'22px', background:'rgba(220,38,38,0.9)', border:'none', borderRadius:'50%', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', color:'white', fontSize:'12px', lineHeight:1 }}
+                                                title="Remove image"
+                                            >✕</button>
+                                        )}
                                     </div>
                                 </div>
                             </div>
