@@ -103,7 +103,7 @@ registerBlockType('dedwards/work-hero', {
                                                     {detailImage1 ? 'Change Image' : 'Add Image'}
                                                 </Button>
                                                 {detailImage1 && (
-                                                    <Button variant="tertiary" isDestructive onClick={() => setAttributes({ detailImage1: null })}>
+                                                    <Button variant="tertiary" isDestructive onClick={() => setAttributes({ detailImage1: undefined })}>
                                                         Remove
                                                     </Button>
                                                 )}
@@ -128,7 +128,7 @@ registerBlockType('dedwards/work-hero', {
                                                     {detailImage2 ? 'Change Image' : 'Add Image'}
                                                 </Button>
                                                 {detailImage2 && (
-                                                    <Button variant="tertiary" isDestructive onClick={() => setAttributes({ detailImage2: null })}>
+                                                    <Button variant="tertiary" isDestructive onClick={() => setAttributes({ detailImage2: undefined })}>
                                                         Remove
                                                     </Button>
                                                 )}
@@ -153,7 +153,7 @@ registerBlockType('dedwards/work-hero', {
                                                     {detailImage3 ? 'Change Image' : 'Add Image'}
                                                 </Button>
                                                 {detailImage3 && (
-                                                    <Button variant="tertiary" isDestructive onClick={() => setAttributes({ detailImage3: null })}>
+                                                    <Button variant="tertiary" isDestructive onClick={() => setAttributes({ detailImage3: undefined })}>
                                                         Remove
                                                     </Button>
                                                 )}

@@ -914,30 +914,35 @@ add_action( 'save_post', 'dedwards_save_work_details' );
  * Expose custom meta fields in REST API for work posts
  */
 function dedwards_register_work_meta_rest() {
+    $auth = function() { return current_user_can( 'edit_posts' ); };
+
     register_post_meta( 'work', '_work_material', array(
-        'show_in_rest' => true,
-        'single' => true,
-        'type' => 'string',
-    ) );
-    
-    register_post_meta( 'work', '_work_year', array(
-        'show_in_rest' => true,
-        'single' => true,
-        'type' => 'string',
-    ) );
-    
-    register_post_meta( 'work', '_work_dimensions', array(
-        'show_in_rest' => true,
-        'single' => true,
-        'type' => 'string',
-    ) );
-    
-    register_post_meta( 'work', '_work_edition', array(
-        'show_in_rest' => true,
-        'single' => true,
-        'type' => 'string',
+        'show_in_rest'  => true,
+        'single'        => true,
+        'type'          => 'string',
+        'auth_callback' => $auth,
     ) );
 
+    register_post_meta( 'work', '_work_year', array(
+        'show_in_rest'  => true,
+        'single'        => true,
+        'type'          => 'string',
+        'auth_callback' => $auth,
+    ) );
+
+    register_post_meta( 'work', '_work_dimensions', array(
+        'show_in_rest'  => true,
+        'single'        => true,
+        'type'          => 'string',
+        'auth_callback' => $auth,
+    ) );
+
+    register_post_meta( 'work', '_work_edition', array(
+        'show_in_rest'  => true,
+        'single'        => true,
+        'type'          => 'string',
+        'auth_callback' => $auth,
+    ) );
 }
 add_action( 'init', 'dedwards_register_work_meta_rest' );
 
@@ -1474,7 +1479,7 @@ function dedwards_render_work_hero( $attributes, $content, $block ) {
     $title = get_the_title( $post_id );
     $description = get_the_content( null, false, $post_id );
     $material = get_post_meta( $post_id, '_work_material', true ) ?: 'Bronze';
-    $year = get_post_meta( $post_id, '_work_year', true ) ?: '2023';
+    $year     = get_post_meta( $post_id, '_work_year', true );
     $dimensions = get_post_meta( $post_id, '_work_dimensions', true );
     $edition = get_post_meta( $post_id, '_work_edition', true );
     
@@ -1577,8 +1582,13 @@ function dedwards_render_work_hero( $attributes, $content, $block ) {
                             <span class="font-display text-stone-800"><?php echo esc_html( $material ); ?></span>
                         </div>
                         <div>
+                            <?php if ( $is_in_progress ) : ?>
+                            <span class="block text-[10px] uppercase tracking-widest text-stone-400 mb-1"><?php echo $year ? 'Started' : 'Status'; ?></span>
+                            <span class="font-display text-stone-800"><?php echo $year ? esc_html( $year ) : 'Current'; ?></span>
+                            <?php else : ?>
                             <span class="block text-[10px] uppercase tracking-widest text-stone-400 mb-1">Year</span>
-                            <span class="font-display text-stone-800"><?php echo esc_html( $year ); ?></span>
+                            <span class="font-display text-stone-800"><?php echo esc_html( $year ?: '—' ); ?></span>
+                            <?php endif; ?>
                         </div>
                         <?php if ( $dimensions ) : ?>
                         <div>
