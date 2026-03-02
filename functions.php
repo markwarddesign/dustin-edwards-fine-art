@@ -704,11 +704,9 @@ function dedwards_register_work_post_type() {
         'rest_base'             => 'works',
         'rewrite'               => array( 'slug' => 'collection', 'with_front' => false ),
         'template'              => array(
-            array( 'core/image' ),
-            array( 'core/paragraph', array(
-                'placeholder' => 'Add work description...',
-            ) ),
+            array( 'dedwards/work-hero' ),
         ),
+        'template_lock'         => 'all',
     );
     
     register_post_type( 'work', $args );
