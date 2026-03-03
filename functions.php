@@ -1870,13 +1870,26 @@ function dedwards_render_philosophy_section( $attributes ) {
  * Render callback for inquire section block
  */
 function dedwards_render_inquire_section( $attributes ) {
-    $heading = $attributes['heading'] ?? 'Inquire';
-    $description = $attributes['description'] ?? 'Available for commissions, gallery exhibitions, and private collection acquisitions.';
-    $studio_location = $attributes['studioLocation'] ?? 'Twin Falls, Idaho, USA';
-    $representation = $attributes['representation'] ?? 'Available for Gallery Representation';
-    $email = $attributes['email'] ?? 'info@dustinedwards.com';
+    $heading      = $attributes['heading'] ?? 'Inquire';
+    $description  = $attributes['description'] ?? 'Available for commissions, gallery exhibitions, and private collection acquisitions.';
     $form_shortcode = $attributes['formShortcode'] ?? '';
-    
+
+    // Dynamic rows — fall back to old individual attributes for existing blocks
+    if ( ! empty( $attributes['infoRows'] ) ) {
+        $info_rows = $attributes['infoRows'];
+    } else {
+        $info_rows = [];
+        $sl = $attributes['studioLocationLabel'] ?? 'Studio Location';
+        $sv = $attributes['studioLocation'] ?? 'Twin Falls, Idaho, USA';
+        if ( $sv ) $info_rows[] = [ 'label' => $sl, 'value' => $sv ];
+        $rl = $attributes['representationLabel'] ?? 'Representation';
+        $rv = $attributes['representation'] ?? 'Available for Gallery Representation';
+        if ( $rv ) $info_rows[] = [ 'label' => $rl, 'value' => $rv ];
+        $cl = $attributes['contactLabel'] ?? 'Contact';
+        $cv = $attributes['email'] ?? 'info@dustinedwards.com';
+        if ( $cv ) $info_rows[] = [ 'label' => $cl, 'value' => $cv ];
+    }
+
     ob_start();
     ?>
     <div class="pt-32 md:pt-48 px-6 md:px-12 pb-24 bg-white min-h-screen">
@@ -1886,21 +1899,17 @@ function dedwards_render_inquire_section( $attributes ) {
                 <p class="font-serif text-xl text-stone-600 mb-12">
                     <?php echo wp_kses_post( $description ); ?>
                 </p>
-                
+
+                <?php if ( ! empty( $info_rows ) ) : ?>
                 <div class="space-y-8 border-t border-stone-100 pt-8">
+                    <?php foreach ( $info_rows as $row ) : ?>
                     <div>
-                        <h3 class="text-xs uppercase tracking-widest text-stone-400 mb-2">Studio Location</h3>
-                        <p class="font-display text-stone-800"><?php echo esc_html( $studio_location ); ?></p>
+                        <h3 class="text-xs uppercase tracking-widest text-stone-400 mb-2"><?php echo wp_kses_post( $row['label'] ?? '' ); ?></h3>
+                        <p class="font-display text-stone-800"><?php echo wp_kses_post( $row['value'] ?? '' ); ?></p>
                     </div>
-                    <div>
-                        <h3 class="text-xs uppercase tracking-widest text-stone-400 mb-2">Representation</h3>
-                        <p class="font-display text-stone-800"><?php echo esc_html( $representation ); ?></p>
-                    </div>
-                    <div>
-                        <h3 class="text-xs uppercase tracking-widest text-stone-400 mb-2">Contact</h3>
-                        <a href="mailto:<?php echo esc_attr( $email ); ?>" class="font-display text-stone-800 hover:text-bronze-600 transition-colors"><?php echo esc_html( $email ); ?></a>
-                    </div>
+                    <?php endforeach; ?>
                 </div>
+                <?php endif; ?>
             </div>
 
             <div>

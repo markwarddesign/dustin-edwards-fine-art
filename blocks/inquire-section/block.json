@@ -17,21 +17,17 @@
       "type": "string",
       "default": "Available for commissions, gallery exhibitions, and private collection acquisitions."
     },
-    "studioLocation": {
-      "type": "string",
-      "default": "Twin Falls, Idaho, USA"
-    },
-    "representation": {
-      "type": "string",
-      "default": "Available for Gallery Representation"
-    },
-    "email": {
-      "type": "string",
-      "default": "info@dustinedwards.com"
-    },
     "formShortcode": {
       "type": "string",
       "default": ""
+    },
+    "infoRows": {
+      "type": "array",
+      "default": [
+        { "label": "Studio Location", "value": "Twin Falls, Idaho, USA" },
+        { "label": "Representation", "value": "Available for Gallery Representation" },
+        { "label": "Contact", "value": "info@dustinedwards.com" }
+      ]
     }
   }
 }

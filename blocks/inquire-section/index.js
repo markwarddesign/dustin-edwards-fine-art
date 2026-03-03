@@ -8,27 +8,27 @@ registerBlockType('dedwards/inquire-section', {
         const blockProps = useBlockProps({
             className: 'pt-32 md:pt-48 px-6 md:px-12 pb-24 bg-white min-h-screen'
         });
-        const { heading, description, studioLocation, representation, email, formShortcode } = attributes;
+        const { heading, description, infoRows, formShortcode } = attributes;
+
+        const updateRow = (index, field, value) => {
+            const updated = infoRows.map((row, i) =>
+                i === index ? { ...row, [field]: value } : row
+            );
+            setAttributes({ infoRows: updated });
+        };
+
+        const addRow = () => {
+            setAttributes({ infoRows: [...infoRows, { label: '', value: '' }] });
+        };
+
+        const removeRow = (index) => {
+            setAttributes({ infoRows: infoRows.filter((_, i) => i !== index) });
+        };
 
         return (
             <>
                 <InspectorControls>
-                    <PanelBody title={__('Contact Information', 'dedwards')}>
-                        <TextControl
-                            label={__('Studio Location', 'dedwards')}
-                            value={studioLocation}
-                            onChange={(value) => setAttributes({ studioLocation: value })}
-                        />
-                        <TextControl
-                            label={__('Representation', 'dedwards')}
-                            value={representation}
-                            onChange={(value) => setAttributes({ representation: value })}
-                        />
-                        <TextControl
-                            label={__('Email', 'dedwards')}
-                            value={email}
-                            onChange={(value) => setAttributes({ email: value })}
-                        />
+                    <PanelBody title={__('Contact Form', 'dedwards')}>
                         <TextControl
                             label={__('Contact Form 7 Shortcode', 'dedwards')}
                             value={formShortcode}
@@ -55,22 +55,35 @@ registerBlockType('dedwards/inquire-section', {
                                 onChange={(value) => setAttributes({ description: value })}
                                 placeholder={__('Enter description...', 'dedwards')}
                             />
-                            
-                            <div className="space-y-8 border-t border-stone-100 pt-8">
-                                <div>
-                                    <h3 className="text-xs uppercase tracking-widest text-stone-400 mb-2">Studio Location</h3>
-                                    <p className="font-display text-stone-800">{studioLocation}</p>
-                                </div>
-                                <div>
-                                    <h3 className="text-xs uppercase tracking-widest text-stone-400 mb-2">Representation</h3>
-                                    <p className="font-display text-stone-800">{representation}</p>
-                                </div>
-                                <div>
-                                    <h3 className="text-xs uppercase tracking-widest text-stone-400 mb-2">Contact</h3>
-                                    <a href={`mailto:${email}`} className="font-display text-stone-800 hover:text-bronze-600 transition-colors">
-                                        {email}
-                                    </a>
-                                </div>
+
+                            <div className="space-y-6 border-t border-stone-100 pt-8">
+                                {infoRows.map((row, index) => (
+                                    <div key={index} style={{ position: 'relative', paddingRight: '28px' }}>
+                                        <RichText
+                                            tagName="h3"
+                                            className="text-xs uppercase tracking-widest text-stone-400 mb-2"
+                                            value={row.label}
+                                            onChange={(value) => updateRow(index, 'label', value)}
+                                            placeholder={__('Label', 'dedwards')}
+                                        />
+                                        <RichText
+                                            tagName="p"
+                                            className="font-display text-stone-800"
+                                            value={row.value}
+                                            onChange={(value) => updateRow(index, 'value', value)}
+                                            placeholder={__('Value...', 'dedwards')}
+                                        />
+                                        <button
+                                            onClick={() => removeRow(index)}
+                                            style={{ position: 'absolute', top: '2px', right: '0', background: 'rgba(220,38,38,0.85)', border: 'none', borderRadius: '50%', width: '20px', height: '20px', cursor: 'pointer', color: 'white', fontSize: '11px', display: 'flex', alignItems: 'center', justifyContent: 'center', lineHeight: 1 }}
+                                            title={__('Remove row', 'dedwards')}
+                                        >✕</button>
+                                    </div>
+                                ))}
+                                <button
+                                    onClick={addRow}
+                                    style={{ marginTop: '8px', padding: '5px 14px', background: 'transparent', border: '1px dashed #a8a29e', borderRadius: '4px', cursor: 'pointer', fontSize: '12px', color: '#78716c' }}
+                                >+ {__('Add Row', 'dedwards')}</button>
                             </div>
                         </div>
 
